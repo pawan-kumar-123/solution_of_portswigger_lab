@@ -1,5 +1,5 @@
 # solution_of_portswigger_lab
-Authentication, Access Control, SSRF, SQLI, Path Traversal, XXEI, XSS,J WT Attack,API Testing
+Authentication, Access Control, SSRF, SQLI, Path Traversal, XXE, XSS,J WT Attack,API Testing
 
 
 
